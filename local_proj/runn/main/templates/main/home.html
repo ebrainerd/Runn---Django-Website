@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+	{% for post in posts %}
+		<article class="media content-section">
+		  <div class="media-body">
+		    <div class="article-metadata">
+		      <a class="mr-2" href="#">{{ post.author }}</a>
+		      <small class="text-muted">{{ post.date_posted }}</small>
+		    </div>
+		    <h2><a class="article-title" href="#"><u>{{ post.title }}</u></a></h2>
+		    <p class="article-content">{{ post.content }}</p>
+		    <div class="row">
+			  <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
+			  <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
+			  <!-- Optional: clear the XS cols if their content doesn't match in height -->
+			  <div class="clearfix visible-xs-block"></div>
+			  <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
+			</div>
+		    <!-- <p class="article-content"><b>Distance: </b>{{ post.distance }} miles</p> -->
+<!-- 		    <p class="article-content"><b>Time: </b>{{ post.time }} minutes</p>
+		    <p class="article-content"><b>Pace: </b>{{ post.pace }} mins/mile</p> -->
+		  </div>
+		</article>
+	{% endfor %}
+{% endblock content %}

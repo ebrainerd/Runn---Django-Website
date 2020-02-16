@@ -1,0 +1,20 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+	<article class="media content-section">
+	  <div class="media-body">
+	    <div class="article-metadata">
+	      <a class="mr-2" href="#">{{ object.author }}</a>
+	      <small class="text-muted">{{ object.date_posted }}</small>
+	    </div>
+	    <h2 class="article-title"><u>{{ object.title }}</u></h2>
+	    <p class="article-content">{{ object.content }}</p>
+	    <div class="row">
+		  <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ object.distance }} miles</div>
+		  <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ object.time }} minutes</div>
+		  <div class="clearfix visible-xs-block"></div>
+		  <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ object.pace }} mins/mile</div>
+		</div>
+	  </div>
+	</article>
+{% endblock content %}

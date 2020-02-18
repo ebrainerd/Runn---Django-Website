@@ -3,6 +3,7 @@ from django.db import connections
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+import MySQLdb
 
 
 class Post(models.Model):

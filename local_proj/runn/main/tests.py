@@ -1,7 +1,7 @@
 from django.test import TestCase
+from main.models import *
+from django.contrib.auth.models import User
 import unittest
-#from .models import Post
-from models import Post
 
 # Create your tests here.
 class LemarsUnitTest(unittest.TestCase):
@@ -33,7 +33,29 @@ class LemarsUnitTest(unittest.TestCase):
 		# Assert
 		self.assertEqual(self.post.content, updated_content)
 
+class RunPostTestCase(TestCase):
 
+    def setUp(self):
+
+        # Arrange and Act
+        Run.objects.create(
+            title="My best run!",
+            content="I ran fast",
+            distance=6.9,
+            time=30,
+            author=User.objects.create_user(username='Elliot',
+                                            password='testing')
+        )
+
+    def testPostContents(self):
+
+        # Assert
+        my_post = Run.objects.get(title="My best run!")
+        self.assertEqual(my_post.title, "My best run!")
+        self.assertEqual(my_post.content, "I ran fast")
+        self.assertEqual(my_post.distance, 6.9)
+        self.assertEqual(my_post.time, 30)
+        self.assertEqual(my_post.author, User.objects.get(username='Elliot'))
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 class Post(models.Model):
 	title = models.CharField(max_length=100)
 	content = models.TextField()

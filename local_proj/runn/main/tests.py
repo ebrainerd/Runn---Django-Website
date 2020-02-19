@@ -2,11 +2,6 @@ from django.test import TestCase
 from main.models import *
 from django.contrib.auth.models import User
 
-# Run tests from terminal with ./manage.py test
-
-# To use test coverage:
-#   pip install django-nose
-#   ./manage.py test --with-coverage
 
 class RunPostTestCase(TestCase):
 

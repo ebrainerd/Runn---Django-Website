@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-
 class Post(models.Model):
 	title = models.CharField(max_length=100)
 	content = models.TextField()
@@ -14,6 +13,8 @@ class Post(models.Model):
 
 	@property
 	def pace(self):
+		if self.distance == 0.0:
+			return 0.0
 		return round(self.time / self.distance, 2)
 
 	def __str__(self):

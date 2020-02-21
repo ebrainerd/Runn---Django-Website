@@ -20,12 +20,13 @@ class Profile(models.Model):
 class Post(models.Model):
 	run_id = models.AutoField(primary_key=True)
 	author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+	title = models.TextField(max_length=100, blank=False, default="title holder.")
 	distance = models.FloatField(default=0.0, blank=False)
 	time = models.IntegerField(default=0, blank=False)
 	date_posted = models.DateTimeField(default=timezone.now)
 	location = models.TextField(max_length=100, blank=False, default="")
 	image = models.TextField(max_length=250, blank=True)
-	content = models.TextField(max_length=1000, blank=True)
+	content = models.TextField(max_length=1000, blank=True, default="")
 
 	@property
 	def pace(self):

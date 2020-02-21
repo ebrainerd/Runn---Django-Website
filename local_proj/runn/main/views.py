@@ -17,7 +17,6 @@ def home(request):
 
 	return render(request, 'main/home.html', context)
 
-
 class PostListView(ListView):
 	model = Post
 	template_name = 'main/home.html'  # <app>/<model>_<viewtpye>.html
@@ -61,8 +60,6 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 			return True
 
 		return False
-
-
 
 def about(request):
 	return render(request, 'main/about.html', {'title': 'About'})

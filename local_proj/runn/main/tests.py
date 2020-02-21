@@ -6,11 +6,6 @@ import unittest
 # Create your tests here.
 class LemarsUnitTest(unittest.TestCase):
 
-	# def test_blah(self):
-	# 	title = "blah"
-
-	# 	self.assertEqual(title, "blah")
-
 	def test_update_post(self):
 		# Arrange
 		title = "My first run!"

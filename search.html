@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+
+
+<!-- Returns all posts for now until data can e queried-->cxdzs
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
+    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
+           name="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+{% block content %}
+<h1><u>Runn Search!</u></h1>
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
+    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
+           name="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+{% for Profile in object_list %}
+<li>
+    {{Profile.user}}, {{Profile.first_name}}, {{Profile.last_name}}
+</li>
+{% endfor %}
+{%if not object_list%}
+<u2>No matches!!!</u2>
+{% endif%}
+<u1>Results for [input]</u1>
+{% endblock content %}

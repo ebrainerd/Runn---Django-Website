@@ -3,17 +3,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.views.generic import (
-	ListView, 
-	DetailView, 
+	ListView,
+	DetailView,
 	CreateView,
 	UpdateView,
 	DeleteView
 )
 from django.contrib import messages
 from .forms import UserRegisterForm
-from .models import Post
+from .models import Post, Profile
+from django.db.models import Q
 
-def home(request): 
+def home(request):
 	context = {
 		'posts': Post.objects.all()
 	}
@@ -90,3 +91,14 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 		return False
 
+class SearchResultsView(ListView):
+	model = Profile
+	template_name = 'main/search.html'
+	#queryset = Run.objects.filter(title__icontains = 'run')
+	def get_queryset(self):
+		query = self.request.GET.get('q')
+		object_list = Profile.objects.filter(
+			Q(first_name__icontains=query)
+			#Q(author__icontains = query)
+		)
+		return object_list

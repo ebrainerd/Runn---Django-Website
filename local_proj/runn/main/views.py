@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
 from django.views.generic import (
@@ -8,6 +8,8 @@ from django.views.generic import (
 	UpdateView,
 	DeleteView
 )
+from django.contrib import messages
+from .forms import UserRegisterForm
 from .models import Post
 
 def home(request): 
@@ -16,6 +18,21 @@ def home(request):
 	}
 
 	return render(request, 'main/home.html', context)
+
+def about(request):
+    return render(request, 'main/about.html', {'title': 'About'})
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
+            return redirect('main-home')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'main/register.html', {'form' : form})
 
 class PostListView(ListView):
 	model = Post
@@ -60,7 +77,4 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 			return True
 
 		return False
-
-def about(request):
-	return render(request, 'main/about.html', {'title': 'About'})
 

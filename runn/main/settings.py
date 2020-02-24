@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_nose',
+    'crispy_forms',
 ]
 
 # Use nose to run all tests
@@ -77,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'runn.wsgi.application'
+WSGI_APPLICATION = 'main.wsgi.application'
 
 
 # Database

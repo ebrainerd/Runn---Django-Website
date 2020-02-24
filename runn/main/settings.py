@@ -27,7 +27,6 @@ ALLOWED_HOSTS = ['10.144.73.216',
                  'localhost',
                  'user-database.cxg2xklii53v.us-west-2.rds.amazonaws.com']
 
-
 # Application definition
 
 INSTALLED_APPS = [

@@ -94,11 +94,9 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class SearchResultsView(ListView):
 	model = Profile
 	template_name = 'main/search.html'
-	#queryset = Run.objects.filter(title__icontains = 'run')
 	def get_queryset(self):
 		query = self.request.GET.get('q')
 		object_list = Profile.objects.filter(
 			Q(first_name__icontains=query)
-			#Q(author__icontains = query)
 		)
 		return object_list

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.views.generic import (
 	ListView, 
@@ -26,8 +27,19 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.first_name = form.cleaned_data.get('first_name')
+            user.profile.last_name = form.cleaned_data.get('last_name')
+            user.profile.email = form.cleaned_data.get('email')
+            user.profile.bio = form.cleaned_data.get('bio')
+            user.profile.location = form.cleaned_data.get('location')
+            user.save()
+
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
             messages.success(request, f'Account created for {username}!')
             return redirect('main-home')
     else:

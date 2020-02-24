@@ -15,7 +15,6 @@ class Profile(models.Model):
     email = models.TextField(max_length=75, blank=False, default="")
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
-    user_type = models.IntegerField(default=0, blank=False) # 0 is regular user, 1 is coach 
 
 class Post(models.Model):
 	run_id = models.AutoField(primary_key=True)

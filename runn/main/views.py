@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views.generic import (
 	ListView, 
@@ -28,11 +29,15 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
-            return redirect('main-home')
+            messages.success(request, f'Account created for {username}! You can now login.')
+            return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
+
+@login_required
+def profile(request):
+	return render(request, 'main/profile.html')
 
 class PostListView(ListView):
 	model = Post

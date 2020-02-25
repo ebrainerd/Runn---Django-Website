@@ -1,19 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.views.generic import (
-	ListView, 
-	DetailView, 
+	ListView,
+	DetailView,
 	CreateView,
 	UpdateView,
 	DeleteView
 )
 from django.contrib import messages
 from .forms import UserRegisterForm
-from .models import Post
+from .models import Post, Profile
+from django.db.models import Q
 
-def home(request): 
+def home(request):
 	context = {
 		'posts': Post.objects.all()
 	}
@@ -27,10 +29,20 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}! You can now login.')
-            return redirect('login')
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.first_name = form.cleaned_data.get('first_name')
+            user.profile.last_name = form.cleaned_data.get('last_name')
+            user.profile.email = form.cleaned_data.get('email')
+            user.profile.bio = form.cleaned_data.get('bio')
+            user.profile.location = form.cleaned_data.get('location')
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            messages.success(request, f'Account created for {username}!')
+            return redirect('main-home')
     else:
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
@@ -83,3 +95,14 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 		return False
 
+class SearchResultsView(ListView):
+	model = Profile
+	template_name = 'main/search.html'
+	#queryset = Run.objects.filter(title__icontains = 'run')
+	def get_queryset(self):
+		query = self.request.GET.get('q')
+		object_list = Profile.objects.filter(
+			Q(first_name__icontains=query)
+			#Q(author__icontains = query)
+		)
+		return object_list

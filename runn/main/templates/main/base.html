@@ -56,15 +56,15 @@
             </div>
 
           </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get" >
+                <input name = "q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="search" >
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
         </div>
       </nav>
   </header>
-    
-  
+
+
   <main role="main" class="container">
     <div class="row">
       <div class="col-md-8">
@@ -92,7 +92,7 @@
       </div>
     </div>
   </main>
-    
+
 
 
 	<!-- Optional JavaScript -->

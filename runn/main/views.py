@@ -97,6 +97,6 @@ class SearchResultsView(ListView):
 	def get_queryset(self):
 		query = self.request.GET.get('q')
 		object_list = Profile.objects.filter(
-			Q(first_name__icontains=query)
+			Q(first_name__icontains=query) | Q(last_name__icontains=query) #| Q(last_name__icontains=query)
 		)
 		return object_list

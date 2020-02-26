@@ -17,10 +17,10 @@
 <h3>Results for [input]</h3>
 {% for Profile in object_list %}
 <li>
-    {{Profile.username }} {{Profile.first_name }} {{Profile.last_name}}
+    {{Profile.user.username }} {{Profile.first_name }} {{Profile.last_name}}
 </li>
 {% endfor %}
 {%if not object_list%}
-<u2>No matches!!! Try searching by first or last name</u2>
+<u2>No matches!!! Try searching by username or first or last name</u2>
 {% endif%}
 {% endblock content %}

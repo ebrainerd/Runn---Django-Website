@@ -12,6 +12,7 @@ from django.views.generic import (
 from django.contrib import messages
 from .forms import UserRegisterForm
 from .models import Post, Profile
+from django.contrib.auth.models import User
 from django.db.models import Q
 
 def home(request):
@@ -97,6 +98,6 @@ class SearchResultsView(ListView):
 	def get_queryset(self):
 		query = self.request.GET.get('q')
 		object_list = Profile.objects.filter(
-			Q(first_name__icontains=query) | Q(last_name__icontains=query) #| Q(last_name__icontains=query)
+			Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query)
 		)
 		return object_list

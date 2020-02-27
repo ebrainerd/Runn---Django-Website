@@ -4,8 +4,7 @@ from django.contrib.auth.models import User
 from .models import Post
 from .models import Profile
 
-# admin.site.register(Post)
-# admin.site.register(Profile)
+admin.site.register(Post)
 
 class ProfileInline(admin.StackedInline):
     model = Profile

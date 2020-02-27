@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.contrib.auth.decorators import login_required
 from .views import (
 	PostListView,
 	PostDetailView,
@@ -20,9 +21,9 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='main/logout.html'), name="logout"),
     path('profile/', views.profile, name="profile"),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
-    path('post/new/', PostCreateView.as_view(), name='post-create'),
-    path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
-    path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+    path('post/new/', login_required(PostCreateView.as_view()), name='post-create'),
+    path('post/<int:pk>/update/', login_required(PostUpdateView.as_view()), name='post-update'),
+    path('post/<int:pk>/delete/', login_required(PostDeleteView.as_view()), name='post-delete'),
     path('about/', views.about, name="main-about"),
     path('search/', SearchResultsView.as_view(), name="main-search"),
 ]

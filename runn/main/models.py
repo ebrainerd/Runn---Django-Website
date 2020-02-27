@@ -16,10 +16,13 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
 
+    def __str__(self):
+    	return self.first_name + " " + self.last_name
+
 class Post(models.Model):
 	run_id = models.AutoField(primary_key=True)
 	author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-	title = models.TextField(max_length=100, blank=False, default="title holder.")
+	title = models.TextField(max_length=100, blank=False, default="")
 	distance = models.FloatField(default=0.0, blank=False)
 	time = models.IntegerField(default=0, blank=False)
 	date_posted = models.DateTimeField(default=timezone.now)

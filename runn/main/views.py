@@ -57,10 +57,10 @@ class PostListView(ListView):
 	context_object_name = 'posts'
 	ordering = ['-date_posted']
 
-
 class PostDetailView(DetailView):
 	model = Post
 
+#@login_required
 class PostCreateView(CreateView):
 	model = Post
 	fields = ['title', 'content', 'distance', 'time']

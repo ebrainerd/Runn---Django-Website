@@ -9,6 +9,7 @@
 		      <small class="text-muted">{{ post.date_posted }}</small>
 		    </div>
 		    <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}"><u>{{ post.title }}</u></a></h2>
+
 		    <p class="article-content">{{ post.content }}</p>
 		    <div class="row">
 			  <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
@@ -16,6 +17,10 @@
 			  <div class="clearfix visible-xs-block"></div>
 			  <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
 			</div>
+			<div>
+		   		<a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+			</div>
+
 		  </div>
 		</article>
 	{% endfor %}

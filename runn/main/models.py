@@ -50,19 +50,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-# class Comment(models.Model):
-# 	post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
-	# comment_id = models.AutoField(primary_key=True)
-# 	author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-# 	content = models.TextField(max_length=1000, blank=False, default="")
-# 	date_posted = models.DateTimeField(default=timezone.now)
-
-# 	class Meta:
-# 		ordering = ['date_posted']
-
-# 	def __str__(self):
-# 		return 'Comment {} by {}'.format(self.content, self.author.first_name)
-
 class Comment(models.Model):
 	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
 	comment_id = models.AutoField(primary_key=True)
@@ -75,7 +62,3 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return 'Comment {} by {}'.format(self.content, self.author.first_name)
-
-# class Following(models.Model):
-# 	UserID_Following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile1')
-# 	UserID_Followee = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile2')

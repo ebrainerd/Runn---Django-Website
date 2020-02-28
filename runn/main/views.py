@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.views.generic import (
@@ -57,7 +58,6 @@ def register(request):
             user.profile.bio = form.cleaned_data.get('bio')
             user.profile.location = form.cleaned_data.get('location')
             user.save()
-
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
@@ -67,6 +67,10 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
 
+
+@login_required
+def profile(request):
+	return render(request, 'main/profile.html')
 
 class PostListView(ListView):
 	model = Post

@@ -26,12 +26,10 @@ def home(request):
 def about(request):
     return render(request, 'main/about.html', {'title': 'About'})
 
-
 def add_comment_to_post(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	print("in func")
 	print(post)
-
 
 	if request.method == "POST":
 		print("In post")
@@ -44,7 +42,6 @@ def add_comment_to_post(request, pk):
 	else:
 		form = CommentForm()
 	return render(request, 'main/add_comment_to_post.html', {'form': form, 'post':post})
-
 
 def register(request):
     if request.method == 'POST':
@@ -90,8 +87,6 @@ class PostCreateView(CreateView):
 	def form_valid(self, form):
 		form.instance.author = self.request.user.profile
 		return super().form_valid(form)
-
-
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Post

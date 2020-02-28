@@ -17,7 +17,8 @@ from django.db.models import Q
 
 def home(request):
 	context = {
-		'posts': Post.objects.all()
+		'posts': Post.objects.all(),
+		'nbar': 'home',
 	}
 
 	return render(request, 'main/home.html', context)

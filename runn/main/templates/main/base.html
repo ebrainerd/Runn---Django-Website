@@ -46,7 +46,7 @@
                   <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>
                 <li {% if "/post/new/" == request.path %}class="nav-item active"{% endif %}>
-                  <a class="nav-item nav-link" href="{% url 'post-create' %}">Log Run</a>
+                  <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
                 </li>
               {% else %}
                 <li {% if "/login/" == request.path %}class="nav-item active"{% endif %}>

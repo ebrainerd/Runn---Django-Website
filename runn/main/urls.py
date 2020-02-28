@@ -25,4 +25,5 @@ urlpatterns = [
     path('post/<int:pk>/delete/', login_required(PostDeleteView.as_view()), name='post-delete'),
     path('about/', views.about, name="main-about"),
     path('search/', SearchResultsView.as_view(), name="main-search"),
+    path('post/<int:pk>/comment/', views.add_comment_to_post, name='add_comment_to_post'),
 ]

@@ -1,10 +1,20 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Post, Comment
 from .models import Profile
 
 admin.site.register(Post)
+admin.site.register(Comment)
+
+class CommentAdmin(admin.ModelAdmin):
+	list_display = ('name', 'body', 'post', 'created_on', 'active')
+	list_filter = ('active', 'created_on')
+	search_fields = ('name', 'email', 'body')
+	actions = ['approve_comments']
+
+	def approve_comments(self, request, queryset):
+		queryset.update(active=True)
 
 class ProfileInline(admin.StackedInline):
     model = Profile

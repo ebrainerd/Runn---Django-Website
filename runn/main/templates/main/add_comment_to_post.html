@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>New comment</h1>
+
+    <!-- <form action="{% url 'post-detail' pk=post.pk %}" method="POST"> -->
+    <form method="POST">
+
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">New Comment</legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <!-- <a class="btn btn-outline-info" type="submit" href="{% url 'post-detail' pk=post.pk %}">Send</a> -->
+            <!-- <input type="submit" class="btn btn-outline-info"/> -->
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-outline-info">Send</button>
+            <!-- <a class="btn btn-outline-info" type="submit" href="{% url 'post-detail' pk=post.pk %}">Send</a> -->
+
+        </div>
+    </form>
+{% endblock %}
+

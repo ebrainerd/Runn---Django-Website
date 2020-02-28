@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
@@ -10,8 +10,8 @@ from django.views.generic import (
 	DeleteView
 )
 from django.contrib import messages
-from .forms import UserRegisterForm
-from .models import Post, Profile
+from .forms import UserRegisterForm, CommentForm
+from .models import Post, Profile, Comment
 from django.db.models import Q
 
 def home(request):
@@ -23,6 +23,26 @@ def home(request):
 
 def about(request):
     return render(request, 'main/about.html', {'title': 'About'})
+
+
+def add_comment_to_post(request, pk):
+	post = get_object_or_404(Post, pk=pk)
+	print("in func")
+	print(post)
+
+
+	if request.method == "POST":
+		print("In post")
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			comment = form.save(commit=False)
+			comment.post = post
+			comment.save()
+			return redirect('post-detail', pk=post.pk)
+	else:
+		form = CommentForm()
+	return render(request, 'main/add_comment_to_post.html', {'form': form, 'post':post})
+
 
 def register(request):
     if request.method == 'POST':
@@ -47,6 +67,7 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
 
+
 class PostListView(ListView):
 	model = Post
 	template_name = 'main/home.html'  # <app>/<model>_<viewtpye>.html
@@ -56,6 +77,7 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
 	model = Post
+
 
 class PostCreateView(CreateView):
 	model = Post

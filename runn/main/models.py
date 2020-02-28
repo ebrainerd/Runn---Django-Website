@@ -76,7 +76,6 @@ class Comment(models.Model):
 	def __str__(self):
 		return 'Comment {} by {}'.format(self.content, self.author.first_name)
 
-
-class Following(models.Model):
-	UserID_Following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile1')
-	UserID_Followee = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile2')
+# class Following(models.Model):
+# 	UserID_Following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile1')
+# 	UserID_Followee = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile2')

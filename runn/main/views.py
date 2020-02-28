@@ -28,15 +28,13 @@ def about(request):
 
 def add_comment_to_post(request, pk):
 	post = get_object_or_404(Post, pk=pk)
-	print("in func")
-	print(post)
 
 	if request.method == "POST":
-		print("In post")
 		form = CommentForm(request.POST)
 		if form.is_valid():
 			comment = form.save(commit=False)
 			comment.post = post
+			comment.author = request.user.profile
 			comment.save()
 			return redirect('post-detail', pk=post.pk)
 	else:

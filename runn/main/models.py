@@ -16,6 +16,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
 
+
     def __str__(self):
     	return self.first_name + " " + self.last_name
 
@@ -27,7 +28,6 @@ class Post(models.Model):
 	time = models.IntegerField(default=0, blank=False)
 	date_posted = models.DateTimeField(default=timezone.now)
 	location = models.TextField(max_length=100, blank=False, default="")
-	image = models.TextField(max_length=250, blank=True)
 	content = models.TextField(max_length=1000, blank=True, default="")
 
 	@property
@@ -57,8 +57,3 @@ class Comment(models.Model):
 	run_id = models.ForeignKey(Post, on_delete=models.CASCADE) 
 	content = models.TextField(max_length=1000, blank=False, default="")
 	date_posted = models.DateTimeField(default=timezone.now)
-
-class Following(models.Model):
-	UserID_Following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile1')
-	UserID_Followee = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile2')
-

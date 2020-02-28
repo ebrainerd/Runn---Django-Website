@@ -13,7 +13,6 @@ from .views import (
 from . import views
 
 urlpatterns = [
-    # path('', views.home, name="main-home"),
     path('', PostListView.as_view(), name="main-home"),
     path('admin/', admin.site.urls),
     path('register/', views.register, name="register"),

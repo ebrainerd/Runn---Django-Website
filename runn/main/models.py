@@ -16,7 +16,6 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
 
-
     def __str__(self):
     	return self.first_name + " " + self.last_name
 

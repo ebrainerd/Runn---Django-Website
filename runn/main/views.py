@@ -18,7 +18,6 @@ from django.db.models import Q
 def home(request):
 	context = {
 		'posts': Post.objects.all(),
-		'nbar': 'home',
 	}
 
 	return render(request, 'main/home.html', context)
@@ -54,7 +53,7 @@ def profile(request):
 
 class PostListView(ListView):
 	model = Post
-	template_name = 'main/home.html'  # <app>/<model>_<viewtpye>.html
+	template_name = 'main/home.html' 
 	context_object_name = 'posts'
 	ordering = ['-date_posted']
 

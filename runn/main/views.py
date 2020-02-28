@@ -48,6 +48,16 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
 
+
+def search(request):
+	print (" serarch")
+	query = request.GET.get('q')
+	object_list = Profile.objects.filter(
+		Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query)
+	)
+	context_dict = {'object_list': object_list, 'query': query}
+	return render(request, 'main/search.html', context_dict)
+
 class PostListView(ListView):
 	model = Post
 	template_name = 'main/home.html'  # <app>/<model>_<viewtpye>.html
@@ -92,12 +102,22 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 		return False
 
-class SearchResultsView(ListView):
-	model = Profile
-	template_name = 'main/search.html'
-	def get_queryset(self):
-		query = self.request.GET.get('q')
+#class SearchResultsView(ListView):
+	#model = Profile
+	#template_name = 'main/search.html'
+	def search(request):
+		print (" serarch")
+		query = request.GET.get('q')
 		object_list = Profile.objects.filter(
-			Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query)
+			Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query) | Q(user__location__icontains=query)
 		)
-		return object_list
+		context_dict = {'object_list': object_list, 'query': query}
+		return render(request, 'main/search.html', context_dict)
+
+	#def get_queryset(self):
+	#	print ("Get query")
+	#	query = self.request.GET.get('q')
+	#	object_list = Profile.objects.filter(
+	#		Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query)
+	#	)
+	#	return object_list

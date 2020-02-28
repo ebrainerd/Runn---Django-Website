@@ -14,13 +14,13 @@
            name="search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 </form>
-<h3>Results for [input]</h3>
+<div>You searched for: {{ query }} </div>
 {% for Profile in object_list %}
 <li>
-    {{Profile.user.username }} {{Profile.first_name }} {{Profile.last_name}}
+    {{"Username: "}} {{Profile.user.username }} {{"  Name: "}} {{Profile.first_name }} {{Profile.last_name}} {{"Location: "}} {{Profile.location }}
 </li>
 {% endfor %}
 {%if not object_list%}
-<u2>No matches!!! Try searching by username or first or last name</u2>
+<div>No matches!!! Try searching by username or first or last name</div>
 {% endif%}
 {% endblock content %}

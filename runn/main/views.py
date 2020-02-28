@@ -22,8 +22,8 @@ def home(request):
 
 	return render(request, 'main/home.html', context)
 
-def about(request):
-    return render(request, 'main/about.html', {'title': 'About'})
+def search(request):
+    return render(request, 'main/search.html', {'title': 'Search'})
 
 def register(request):
     if request.method == 'POST':
@@ -48,14 +48,14 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
 
-
-def search(request):
-	query = request.GET.get('q')
-	object_list = Profile.objects.filter(
-		Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query) | Q(location__icontains = query)
-	)
-	context_dict = {'object_list': object_list, 'query': query}
-	return render(request, 'main/search.html', context_dict)
+def search_users(request):
+	if request.method == 'GET':
+		query = request.GET.get('q')
+		object_list = Profile.objects.filter(
+			Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query) | Q(location__icontains = query)
+		)
+		context_dict = {'object_list': object_list, 'query': query}
+	return render(request, 'main/search_users_name.html', context_dict)
 
 class PostListView(ListView):
 	model = Post

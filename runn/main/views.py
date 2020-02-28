@@ -86,17 +86,20 @@ class PostDetailView(DetailView):
 class PostCreateView(CreateView):
 	model = Post
 	fields = ['title', 'content', 'distance', 'time']
+	success_url = '/'
 
 	def form_valid(self, form):
-		form.instance.author = self.request.user
+		form.instance.author = self.request.user.profile
 		return super().form_valid(form)
+
+
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Post
 	fields = ['title', 'content', 'distance', 'time']
 
 	def form_valid(self, form):
-		form.instance.author = self.request.user
+		form.instance.author = self.request.user.profile
 		return super().form_valid(form)
 
 	def test_func(self):

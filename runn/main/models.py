@@ -15,6 +15,7 @@ class Profile(models.Model):
     email = models.TextField(max_length=75, blank=False, default="")
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
+    follows = models.ManyToManyField('Profile', related_name='followed_by', symmetrical=False)
 
     def __str__(self):
     	return self.first_name + " " + self.last_name

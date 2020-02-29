@@ -15,6 +15,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm, CommentForm
 from .models import Post, Profile, Comment
 from django.db.models import Q
+from django.template import RequestContext
 
 def home(request):
 	context = {
@@ -63,7 +64,6 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
 
-
 @login_required
 def profile(request):
 	return render(request, 'main/profile.html')
@@ -107,6 +107,35 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	def test_func(self):
 		post = self.get_object()
 		if self.request.user.profile == post.author:
+			return True
+		return False
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	model = Comment
+	fields = ['content']
+	template_name = 'main/add_comment_to_post.html'
+
+	def form_valid(self, form):
+		form.instance.author = self.request.user.profile
+		return super().form_valid(form)
+
+	def test_func(self):
+		comment = self.get_object()
+		if self.request.user.profile == comment.author:
+			return True
+		return False
+
+	def get_success_url(self):
+		return reverse('post-detail')
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+	model = Comment
+	success_url = '/' #TODO success url should be same post where comment was 
+	template_name = 'main/comment_confirm_delete.html'
+
+	def test_func(self):
+		comment = self.get_object()
+		if self.request.user.profile == comment.author:
 			return True
 		return False
 

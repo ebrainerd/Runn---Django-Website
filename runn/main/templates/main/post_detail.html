@@ -26,7 +26,12 @@
 		{% for comment in post.comments.all %}
 	    <div class="comment">
         <div class="date">{{ comment.date_posted }}</div>
-        <strong><a href="{% url 'post-detail' pk=post.pk %}">{{ comment.author }}</a></strong>
+        <!-- TODO: Link below to user's profile page. Replace 'post-detail' -->
+        <strong><a href="{% url 'post-detail' pk=post.pk %}">{{ comment.author }}</a></strong> 
+        {% if comment.author == user.profile %}
+	      	<a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'comment-update' comment.comment_id %}">Update Comment</a>
+	      	<a class='btn btn-danger btn-sm mt-1 mb-1' href="{% url 'comment-delete' comment.comment_id %}">Delete Comment</a>
+	      {% endif %}
         <p>{{ comment.content|linebreaks }}</p>
 	    </div>
 		{% empty %}

@@ -26,7 +26,7 @@
 		{% for comment in post.comments.all %}
 	    <div class="comment">
         <div class="date">{{ comment.date_posted }}</div>
-        <strong><a href="{% url 'post-detail' pk=post.pk %}">{{ comment.author }}</a></strong>
+        <strong><a href="{% url 'user-profile' pk=comment.author.pk %}">{{ comment.author }}</a></strong>
         <p>{{ comment.content|linebreaks }}</p>
 	    </div>
 		{% empty %}

@@ -65,8 +65,16 @@ def register(request):
 
 
 @login_required
-def profile(request):
-	return render(request, 'main/profile.html')
+def my_profile(request):
+	return render(request, 'main/my_profile.html')
+
+# def user_profile(request, pk):
+# 	return render(request, 'main/user_profile.html')
+
+class UserProfileView(ListView):
+	model = Profile
+	template_name = 'main/user_profile.html'
+
 
 class PostListView(ListView):
 	model = Post

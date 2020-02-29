@@ -39,8 +39,8 @@
             <!--Added buttons for login/logout here-->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
-                <li {% if "/profile/" == request.path %}class="nav-item active"{% endif %}>
-                  <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                <li {% if "/myprofile/" == request.path %}class="nav-item active"{% endif %}>
+                  <a class="nav-item nav-link" href="{% url 'my-profile' %}">Profile</a>
                 </li>
                 <li {% if "/logout/" == request.path %}class="nav-item active"{% endif %}>
                   <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>

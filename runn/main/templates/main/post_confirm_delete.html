@@ -12,6 +12,7 @@
                 <h2>Are you sure you want to delete the post <strong>"{{ post.title }}"</strong>?</h2>
             </fieldset>
             <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
                 <a class="btn btn-outline-secondary" href="{% url 'post-detail' post.run_id %}"><strong>Cancel</strong></a>
             </div>
         </form>

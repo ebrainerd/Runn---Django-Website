@@ -11,10 +11,10 @@ class UserRegisterForm(UserCreationForm):
     location = forms.CharField(max_length=100, required=True, help_text='Required. Max 100 characters.')
 
     class Meta:
-        model = User
+        model = User 
         fields = ['username', 'email', 'first_name', 'last_name', 'bio', 'location', 'password1', 'password2']
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['author', 'content']
+        fields = ['content']

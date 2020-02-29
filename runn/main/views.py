@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.views.generic import (
 	ListView,
@@ -17,7 +18,7 @@ from django.db.models import Q
 
 def home(request):
 	context = {
-		'posts': Post.objects.all()
+		'posts': Post.objects.all(),
 	}
 
 	return render(request, 'main/home.html', context)
@@ -25,25 +26,20 @@ def home(request):
 def about(request):
     return render(request, 'main/about.html', {'title': 'About'})
 
-
 def add_comment_to_post(request, pk):
 	post = get_object_or_404(Post, pk=pk)
-	print("in func")
-	print(post)
-
 
 	if request.method == "POST":
-		print("In post")
 		form = CommentForm(request.POST)
 		if form.is_valid():
 			comment = form.save(commit=False)
 			comment.post = post
+			comment.author = request.user.profile
 			comment.save()
 			return redirect('post-detail', pk=post.pk)
 	else:
 		form = CommentForm()
 	return render(request, 'main/add_comment_to_post.html', {'form': form, 'post':post})
-
 
 def register(request):
     if request.method == 'POST':
@@ -74,14 +70,12 @@ def profile(request):
 
 class PostListView(ListView):
 	model = Post
-	template_name = 'main/home.html'  # <app>/<model>_<viewtpye>.html
+	template_name = 'main/home.html'
 	context_object_name = 'posts'
 	ordering = ['-date_posted']
 
-
 class PostDetailView(DetailView):
 	model = Post
-
 
 class PostCreateView(CreateView):
 	model = Post
@@ -91,8 +85,6 @@ class PostCreateView(CreateView):
 	def form_valid(self, form):
 		form.instance.author = self.request.user.profile
 		return super().form_valid(form)
-
-
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Post
@@ -104,9 +96,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 	def test_func(self):
 		post = self.get_object()
-		if self.request.user == post.author:
+		if self.request.user.profile == post.author:
 			return True
-
 		return False
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -115,9 +106,8 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 	def test_func(self):
 		post = self.get_object()
-		if self.request.user == post.author:
+		if self.request.user.profile == post.author:
 			return True
-
 		return False
 
 class SearchResultsView(ListView):

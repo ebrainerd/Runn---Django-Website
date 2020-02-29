@@ -6,7 +6,6 @@ from .models import Profile
 
 admin.site.register(Post)
 admin.site.register(Comment)
-# admin.site.register(Profile)
 
 class CommentAdmin(admin.ModelAdmin):
 	list_display = ('name', 'body', 'post', 'created_on', 'active')
@@ -30,7 +29,6 @@ class CustomUserAdmin(UserAdmin):
         if not obj:
             return list()
         return super(CustomUserAdmin, self).get_inline_instances(request, obj)
-
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)

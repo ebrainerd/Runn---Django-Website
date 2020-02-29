@@ -5,7 +5,7 @@
 		<article class="media content-section">
 		  <div class="media-body">
 		    <div class="article-metadata">
-		      <a class="mr-2" href="#">{{ post.author.first_name }}</a>
+		      <a class="mr-2" href="#">{{ post.author }}</a>
 		      <small class="text-muted">{{ post.date_posted }}</small>
 		    </div>
 		    <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}"><u>{{ post.title }}</u></a></h2>
@@ -16,6 +16,7 @@
 			  <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
 			  <div class="clearfix visible-xs-block"></div>
 			  <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
+			  <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
 			</div>
 			<div>
 		   		<a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
@@ -25,5 +26,3 @@
 		</article>
 	{% endfor %}
 {% endblock content %}
-
-<!--changed post.id to post.runn_id-->

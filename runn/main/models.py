@@ -16,15 +16,17 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
 
+    def __str__(self):
+    	return self.first_name + " " + self.last_name
+
 class Post(models.Model):
 	run_id = models.AutoField(primary_key=True)
 	author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-	title = models.TextField(max_length=100, blank=False, default="title holder.")
+	title = models.TextField(max_length=100, blank=False, default="")
 	distance = models.FloatField(default=0.0, blank=False)
 	time = models.IntegerField(default=0, blank=False)
 	date_posted = models.DateTimeField(default=timezone.now)
 	location = models.TextField(max_length=100, blank=False, default="")
-	image = models.TextField(max_length=250, blank=True)
 	content = models.TextField(max_length=1000, blank=True, default="")
 
 	@property
@@ -48,19 +50,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-# class Comment(models.Model):
-# 	post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
-	# comment_id = models.AutoField(primary_key=True)
-# 	author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-# 	content = models.TextField(max_length=1000, blank=False, default="")
-# 	date_posted = models.DateTimeField(default=timezone.now)
-
-# 	class Meta:
-# 		ordering = ['date_posted']
-
-# 	def __str__(self):
-# 		return 'Comment {} by {}'.format(self.content, self.author.first_name)
-
 class Comment(models.Model):
 	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
 	comment_id = models.AutoField(primary_key=True)
@@ -73,9 +62,3 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return 'Comment {} by {}'.format(self.content, self.author.first_name)
-
-
-class Following(models.Model):
-	UserID_Following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile1')
-	UserID_Followee = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile2')
-

@@ -9,7 +9,14 @@
 				<!-- Show button if the profile's user id is the same as the logged in user's id  -->
 	  		<a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a> 
 			{% endif %}
-			<p>{% include 'main/follow_form.html' with username=profile.user.username profile_id=profile.user.pk %}</p>
+      <p>Profile following: {{ profile.following.all }}</p>
+      <p>User following: {{ user.following.all }}</p>
+      {% if request.user in profile.following.all %}
+        This user is followed. 
+      {% endif %}
+			{% if profile_user_id != user.id %} <!-- Show button if the profile's user is not the logged in user -->
+				<p>{% include 'main/follow_form.html' with username=profile.user.username profile_id=profile.user.pk %}</p>
+			{% endif %}
       <fieldset class="form-group">
           <legend class="border-bottom mb-1">Email</legend>
           {{ profile.user.email }}

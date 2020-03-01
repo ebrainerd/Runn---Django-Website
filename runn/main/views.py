@@ -67,12 +67,19 @@ def profile(request, pk):
     }
     return render(request, 'main/profile.html', context)
 
-class ProfileFollowToggle(View):
+class ProfileFollowToggle(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        print(request.POST)
-        return redirect('/profile/6/') # default return to user id 6 (runnuser5)
-        return redirect('user-profile', self.args['pk'])
+        user_to_toggle = request.POST.get("username")
+        print(user_to_toggle)
+        profile_ = Profile.objects.get(user__username__iexact=user_to_toggle)
+        user = request.user
+        print(user, "here")
+        if profile_ in user.following.all():
+            user.following.remove(profile_)
+        else:
+            user.following.add(profile_)
+
+        return redirect('user-profile', self.kwargs['pk'])
 
 # class ProfileDetailView(DetailView):
 #     template_name = 'profiles/user.html'

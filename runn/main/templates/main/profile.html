@@ -1,0 +1,10 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content  %}
+	<h1>{{ profile.user.username }}</h1>
+	{% if profile_user_id == user.id %} 
+		<!-- Show button if the profile's user id is the same as the logged in user's id  -->
+	  <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a> 
+	{% endif %}
+{% endblock content %}

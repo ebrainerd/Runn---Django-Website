@@ -40,7 +40,7 @@
             <div class="navbar-nav">
               {% if user.is_authenticated %}
                 <li {% if "/myprofile/" == request.path %}class="nav-item active"{% endif %}>
-                  <a class="nav-item nav-link" href="{% url 'my-profile' %}">Profile</a>
+                  <a class="nav-item nav-link" href="{% url 'user-profile' user.id %}">Profile</a>
                 </li>
                 <li {% if "/logout/" == request.path %}class="nav-item active"{% endif %}>
                   <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>

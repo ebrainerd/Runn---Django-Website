@@ -20,7 +20,6 @@ def home(request):
 	context = {
 		'posts': Post.objects.all(),
 	}
-
 	return render(request, 'main/home.html', context)
 
 def about(request):
@@ -48,9 +47,9 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             user.refresh_from_db()  # load the profile instance created by the signal
-            user.profile.first_name = form.cleaned_data.get('first_name')
-            user.profile.last_name = form.cleaned_data.get('last_name')
-            user.profile.email = form.cleaned_data.get('email')
+            # user.profile.first_name = form.cleaned_data.get('first_name')
+            # user.profile.last_name = form.cleaned_data.get('last_name')
+            # user.profile.email = form.cleaned_data.get('email')
             user.profile.bio = form.cleaned_data.get('bio')
             user.profile.location = form.cleaned_data.get('location')
             user.save()
@@ -63,7 +62,6 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
 
-
 @login_required
 def my_profile(request):
 	return render(request, 'main/my_profile.html')
@@ -74,7 +72,6 @@ def my_profile(request):
 class UserProfileView(ListView):
 	model = Profile
 	template_name = 'main/user_profile.html'
-
 
 class PostListView(ListView):
 	model = Post

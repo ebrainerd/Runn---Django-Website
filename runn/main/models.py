@@ -10,14 +10,15 @@ from django.dispatch import receiver
 # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.TextField(max_length=50, blank=False, default="")
-    last_name = models.TextField(max_length=50, blank=False, default="")
-    email = models.TextField(max_length=75, blank=False, default="")
+    # don't need the below fields b/c they are handled by the default user model 
+    # first_name = models.TextField(max_length=50, blank=False, default="")
+    # last_name = models.TextField(max_length=50, blank=False, default="")
+    # email = models.TextField(max_length=75, blank=False, default="")
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
 
     def __str__(self):
-    	return self.first_name + " " + self.last_name
+    	return self.user.first_name + " " + self.user.last_name
 
 class Post(models.Model):
 	run_id = models.AutoField(primary_key=True)

@@ -5,16 +5,27 @@
   <div class="media">
     <div class="media-body">
       <h2 class="account-heading">{{ profile.user.username }}</h2>
-      <p class="text-secondary">Email: {{ profile.user.email }}</p>
-      <p class="text-secondary">Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
-      <p class="text-secondary">Location: {{ profile.location }}</p>
-      <p class="text-secondary">Bio: {{ profile.bio }}</p>
       {% if profile_user_id == user.id %} 
 				<!-- Show button if the profile's user id is the same as the logged in user's id  -->
 	  		<a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a> 
 			{% endif %}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-1">Email</legend>
+          {{ profile.user.email }}
+      </fieldset>
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-1">Name</legend>
+          {{ profile.user.first_name }} {{ profile.user.last_name }}
+      </fieldset>
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-1">Location</legend>
+          {{ profile.location }}
+      </fieldset>
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-1">Bio</legend>
+          {{ profile.bio }}
+      </fieldset>
     </div>
   </div>
 	<h1>
 {% endblock content %}
-

@@ -6,12 +6,27 @@ from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+# class ProfileManager(models.Manager):
+#     def toggle_follow(self, request_user, username_to_toggle):
+#         profile_ = Profile.objects.get(user__username__iexact=username_to_toggle)
+#         user = request_user
+#         is_following = False
+#         if user in profile_.followers.all():
+#             profile_.followers.remove(user)
+#         else:
+#             profile_.followers.add(user)
+#             is_following = True
+#         return profile_, is_following
+
 # https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#extending-the-existing-user-model
 # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
+    following = models.ManyToManyField(User, related_name='following', blank=True) # user.following.all()
+
+    #objects = ProfileManager()
 
     def __str__(self):
     	return self.user.first_name + " " + self.user.last_name

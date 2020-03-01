@@ -5,11 +5,12 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.generic import (
+    View,
     ListView,
     DetailView,
     CreateView,
     UpdateView,
-    DeleteView
+    DeleteView,
 )
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
@@ -65,6 +66,36 @@ def profile(request, pk):
         'profile': Profile.objects.get(pk = pk)
     }
     return render(request, 'main/profile.html', context)
+
+class ProfileFollowToggle(View):
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        print(request.POST)
+        return redirect('/profile/6/') # default return to user id 6 (runnuser5)
+        return redirect('user-profile', self.args['pk'])
+
+# class ProfileDetailView(DetailView):
+#     template_name = 'profiles/user.html'
+
+#     def get_object(self):
+#         username = self.kwargs.get("username")
+#         if username is None:
+#             raise Http404
+#         return get_object_or_404(User, username__iexact=username, is_active=True)
+
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
+#         user = context['user']
+#         is_following = False
+#         if user.profile in self.request.user.is_following.all():
+#             is_following = True
+#         context['is_following'] = is_following
+#         query = self.request.GET.get('q')
+#         items_exists = Item.objects.filter(user=user).exists()
+#         qs = RestaurantLocation.objects.filter(owner=user).search(query)
+#         if items_exists and qs.exists():
+#             context['locations'] = qs
+#         return context
 
 @login_required
 def update_profile(request, pk):

@@ -37,7 +37,7 @@ class PostListView(ListView):
 
         user = request.user
         is_following_user_ids = [x.user.id for x in user.is_following.all()]
-        qs = Post.objects.filter(author__user__id__in=is_following_user_ids)
+        qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
         if len(qs) == 0:
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
                 + "until one of the users you follow makes a post.")

@@ -4,26 +4,36 @@
   <div class="content-section">
   <div class="media">
     <div class="media-body">
-      <h2 class="account-heading">{{ profile.user.username }}</h2>
+      <h2 class="account-heading">Profile: {{ user.username }}</h2>
       {% if profile_user_id == user.id %} 
 				<!-- Show button if the profile's user id is the same as the logged in user's id  -->
 	  		<a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a> 
 			{% endif %}
+      <p>Profile followers: {{ user.profile.followers.all }}</p>
+      <p>Profile following: {{ user.is_following.all }}</p>
+      <p>User followers: {{ request.user.profile.followers.all }}</p>
+      <p>User following: {{ request.user.is_following.all }}</p>
+      {% if user.profile in request.user.is_following.all %}
+        Is following.
+      {% endif %}
+			{% if user.id != request.user.id %} <!-- Show button if the displayed user is not the logged in user -->
+				<p>{% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following %}</p>
+			{% endif %}
       <fieldset class="form-group">
           <legend class="border-bottom mb-1">Email</legend>
-          {{ profile.user.email }}
+          {{ user.email }}
       </fieldset>
       <fieldset class="form-group">
           <legend class="border-bottom mb-1">Name</legend>
-          {{ profile.user.first_name }} {{ profile.user.last_name }}
+          {{ user.first_name }} {{ user.last_name }}
       </fieldset>
       <fieldset class="form-group">
           <legend class="border-bottom mb-1">Location</legend>
-          {{ profile.location }}
+          {{ user.profile.location }}
       </fieldset>
       <fieldset class="form-group">
           <legend class="border-bottom mb-1">Bio</legend>
-          {{ profile.bio }}
+          {{ user.profile.bio }}
       </fieldset>
     </div>
   </div>

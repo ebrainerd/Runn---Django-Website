@@ -5,22 +5,79 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.generic import (
+    View,
     ListView,
     DetailView,
     CreateView,
     UpdateView,
-    DeleteView
+    DeleteView,
 )
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from .models import Post, Profile, Comment
 from django.db.models import Q
 
-def home(request):
-    context = {
-        'posts': Post.objects.all(),
-    }
-    return render(request, 'main/home.html', context)
+# class PostListView(ListView):
+#     template_name = 'main/home.html'
+#     context_object_name = 'posts'
+
+#     def get_queryset(self):
+#         if self.request.user.is_authenticated:
+#             return Post.objects.all().order_by('-date_posted')
+#         else:
+#             messages.info(self.request, "You are not logged in. Currently displaying posts in reverse chrono order.")
+#             return Post.objects.all().order_by('date_posted')
+
+class PostListView(ListView):
+    def get(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            qs = Post.objects.all().order_by('-date_posted')
+            messages.info(self.request, "You are not logged in. Currently displaying all posts.")
+            return render(request, 'main/home.html', {'posts':qs})
+
+        user = request.user
+        is_following_user_ids = [x.user.id for x in user.is_following.all()]
+        qs = Post.objects.filter(author__user__id__in=is_following_user_ids)
+        if len(qs) == 0:
+            messages.info(self.request, "There are no posts available to show. Follow other users or wait "
+                + "until one of the users you follow makes a post.")
+        return render(request, 'main/home.html', {'posts':qs})
+
+class PostDetailView(DetailView):
+    model = Post
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'content', 'distance', 'time']
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content', 'distance', 'time']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user.profile == post.author:
+            return True
+        return False
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user.profile == post.author:
+            return True
+        return False
 
 def about(request):
     return render(request, 'main/about.html', {'title': 'About'})
@@ -59,12 +116,31 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form' : form})
 
-def profile(request, pk):
-    context = {
-        'profile_user_id': pk,
-        'profile': Profile.objects.get(pk = pk)
-    }
-    return render(request, 'main/profile.html', context)
+# Class Based View for Profile
+class ProfileDetailView(DetailView):
+    template_name = 'main/profile.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        if pk is None:
+            raise Http404
+        return get_object_or_404(User, id=pk, is_active=True)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
+        user = context['user']
+        is_following = False
+        if user.profile in self.request.user.is_following.all():
+            is_following = True
+        context['is_following'] = is_following
+        return context
+
+class ProfileFollowToggle(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        username_to_toggle = request.POST.get("username")
+        profile_, is_following = Profile.objects.toggle_follow(request.user, username_to_toggle)
+
+        return redirect('user-profile', profile_.user.id)
 
 @login_required
 def update_profile(request, pk):
@@ -93,48 +169,6 @@ def update_profile(request, pk):
     }
 
     return render(request, 'main/profile_update.html', context)
-
-class PostListView(ListView):
-    model = Post
-    template_name = 'main/home.html'
-    context_object_name = 'posts'
-    ordering = ['-date_posted']
-
-class PostDetailView(DetailView):
-    model = Post
-
-class PostCreateView(CreateView):
-    model = Post
-    fields = ['title', 'content', 'distance', 'time']
-    success_url = '/'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        return super().form_valid(form)
-
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Post
-    fields = ['title', 'content', 'distance', 'time']
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        return super().form_valid(form)
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user.profile == post.author:
-            return True
-        return False
-
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Post
-    success_url = '/'
-
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user.profile == post.author:
-            return True
-        return False
 
 class SearchResultsView(ListView):
     model = Profile

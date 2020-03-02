@@ -1,15 +1,10 @@
 {% extends "main/base.html" %}
-<form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
-    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
-           name="search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by location</button>
-</form>
 {% block content %}
 <h1><u>Runn Search!</u></h1>
 <form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-location' %}" method="get">
     <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
            name="search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by location</button>
 </form>
 <div>Searching users by location </div>
 <div>You searched for: <b><u>{{ query }}</u></b>  </div>
@@ -17,12 +12,15 @@
 
 {% for Profile in object_list %}
 <li>
-    {{"Username: "}} {{Profile.user.username }} {{"  Name: "}} {{Profile.user.first_name }} {{Profile.user.last_name}} {{"Location: "}} {{Profile.location }}
+    <a class="mr-2" href="{% url 'user-profile' pk=Profile.pk %}"> Name: {{Profile.user.first_name}}, {{Profile.user.last_name}} Username: {{Profile.user.username }}</a>
+    <br>{{"Location: "}} {{Profile.location }}
 </li>
+<br>
+
 {% endfor %}
 {%if not object_list%}
 <br>
-<div>No matches!!! Try searching by location</div>
+<div>No matches!!! Try searching by location with correct spelling</div>
 {% endif%}
 <br>
 <div>If you want to search by name return to the main search page</div>
@@ -30,4 +28,6 @@
 <form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Click here to return to main search page</button>
 </form>
+<br>
+<br>
 {% endblock content %}

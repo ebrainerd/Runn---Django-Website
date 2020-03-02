@@ -4,14 +4,19 @@
 <!-- Returns all posts for now until data can e queried-->
 {% block content %}
 <h1><u>Runn Search!</u></h1>
-<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users' %}" method="get">
+<h2>Search users by name or by location<h2/>
+<br>
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-name' %}" method="get">
     <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search By Name"
            name="hello">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search By Users</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search By Name</button>
 </form>
-<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users' %}" method="get">
+<h3>Search by firstname, lastname, or username<h3/>
+<br>
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-location' %}" method="get">
     <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search By Location"
            name="search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search By Location</button>
 </form>
+<h3>Search by location<h3/>
 {% endblock content %}

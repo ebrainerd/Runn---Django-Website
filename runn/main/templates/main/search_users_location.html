@@ -2,16 +2,16 @@
 <form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
     <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
            name="search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by location</button>
 </form>
 {% block content %}
 <h1><u>Runn Search!</u></h1>
-<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-name' %}" method="get">
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-location' %}" method="get">
     <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
            name="search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by name</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 </form>
-<div>Searching users by name </div>
+<div>Searching users by location </div>
 <div>You searched for: <b><u>{{ query }}</u></b>  </div>
 <br>
 
@@ -21,7 +21,8 @@
 </li>
 {% endfor %}
 {%if not object_list%}
-<div>No matches!!! Try searching by username or first or last name</div>
+<br>
+<div>No matches!!! Try searching by location</div>
 {% endif%}
 <br>
 <div>If you want to search by name return to the main search page</div>

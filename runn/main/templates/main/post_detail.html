@@ -4,7 +4,7 @@
 	<article class="media content-section">
 	  <div class="media-body">
 	    <div class="article-metadata">
-	      <a class="mr-2" href="#">{{ post.author }}</a>
+	      <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
 	      <small class="text-muted">{{ post.date_posted }}</small>
 	      {% if post.author == user.profile %}
 	      	<a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'post-update' post.run_id %}">Update Post</a>
@@ -26,7 +26,7 @@
 		{% for comment in post.comments.all %}
 	    <div class="comment">
         <div class="date">{{ comment.date_posted }}</div>
-        <strong><a href="{% url 'post-detail' pk=post.pk %}">{{ comment.author }}</a></strong>
+        <strong><a href="{% url 'user-profile' pk=comment.author.pk %}">{{ comment.author }}</a></strong>
         <p>{{ comment.content|linebreaks }}</p>
 	    </div>
 		{% empty %}

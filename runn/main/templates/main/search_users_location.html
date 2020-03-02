@@ -17,7 +17,7 @@
 
 {% for Profile in object_list %}
 <li>
-    {{"Username: "}} {{Profile.user.username }} {{"  Name: "}} {{Profile.first_name }} {{Profile.last_name}} {{"Location: "}} {{Profile.location }}
+    {{"Username: "}} {{Profile.user.username }} {{"  Name: "}} {{Profile.user.first_name }} {{Profile.user.last_name}} {{"Location: "}} {{Profile.location }}
 </li>
 {% endfor %}
 {%if not object_list%}

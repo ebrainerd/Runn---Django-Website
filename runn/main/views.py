@@ -177,7 +177,7 @@ def search_users_name(request):
 	if request.method == 'GET':
 		query = request.GET.get('q')
 		object_list = Profile.objects.filter(
-			Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(user__username__icontains=query)
+			Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query) | Q(user__username__icontains=query)
 		)
 		context_dict = {'object_list': object_list, 'query': query}
 	return render(request, 'main/search_users_name.html', context_dict)

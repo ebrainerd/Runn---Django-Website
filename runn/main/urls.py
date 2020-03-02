@@ -8,6 +8,7 @@ from .views import (
 	PostCreateView,
 	PostUpdateView,
 	PostDeleteView,
+    ProfileDetailView,
     ProfileFollowToggle,
     SearchResultsView
 )
@@ -19,7 +20,8 @@ urlpatterns = [
     path('register/', views.register, name="register"),
     path('login/', auth_views.LoginView.as_view(template_name='main/login.html'), name="login"), #temp_name path might be wrong
     path('logout/', auth_views.LogoutView.as_view(template_name='main/logout.html'), name="logout"),
-    path('profile/<int:pk>/', views.profile, name="user-profile"),
+    #path('profile/<int:pk>/', views.profile, name="user-profile"),
+    path('profile/<int:pk>/', ProfileDetailView.as_view(), name="user-profile"),
     path('profile/<int:pk>/update', views.update_profile, name="update-profile"),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/new/', login_required(PostCreateView.as_view()), name='post-create'),

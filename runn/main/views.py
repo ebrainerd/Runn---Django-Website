@@ -126,11 +126,6 @@ class ProfileDetailView(DetailView):
             raise Http404
         return get_object_or_404(User, id=pk, is_active=True)
 
-class PostCreateView(CreateView):
-	model = Post
-	fields = ['title', 'content', 'distance', 'time', 'location']
-	success_url = '/'
-
     def get_context_data(self, *args, **kwargs):
         context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
         user = context['user']

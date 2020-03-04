@@ -180,7 +180,7 @@ def search_users_name(request):
 def find_user_by_first_and_last_name(query_name):
     qs = Profile.objects.all()
     for term in query_name.split():
-        qs = qs.filter(Q(user__first_name__icontains = term) | Q(user__last_name__icontains = term) )
+        qs = qs.filter(Q(user__first_name__icontains = term) | Q(user__last_name__icontains = term) | Q(user__username__icontains = term) )
     return qs
 
 def search_users_location(request):

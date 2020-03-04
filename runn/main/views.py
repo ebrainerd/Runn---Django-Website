@@ -17,17 +17,6 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentF
 from .models import Post, Profile, Comment
 from django.db.models import Q
 
-# class PostListView(ListView):
-#     template_name = 'main/home.html'
-#     context_object_name = 'posts'
-
-#     def get_queryset(self):
-#         if self.request.user.is_authenticated:
-#             return Post.objects.all().order_by('-date_posted')
-#         else:
-#             messages.info(self.request, "You are not logged in. Currently displaying posts in reverse chrono order.")
-#             return Post.objects.all().order_by('date_posted')
-
 class PostListView(ListView):
     def get(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated:

@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 import unittest
 
 # Create your tests here.
+# class CommentModelTest(unittest.TestCase):
+#     @classmethod
+#     def setUpTestData(cls):
+
+
+
 class LemarsUnitTest(unittest.TestCase):
 
 	def test_update_post(self):

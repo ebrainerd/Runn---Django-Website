@@ -38,6 +38,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         # When a profile is created, have them follow the admin by default. # TODO: follow ALL admin users by default
         default_user_profile = Profile.objects.get(user__username__iexact='admin')
         default_user_profile.followers.add(instance)
+
         # TODO: Also have them follow themselves so they can see their own posts on home feed. 
         instance.profile.followers.add(instance)
 

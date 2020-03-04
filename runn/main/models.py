@@ -39,6 +39,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         default_user_profile = Profile.objects.get(user__username__iexact='admin')
         default_user_profile.followers.add(instance)
         # TODO: Also have them follow themselves so they can see their own posts on home feed. 
+        instance.profile.followers.add(instance)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

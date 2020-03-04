@@ -79,7 +79,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(CreateView):
 	model = Post
-	fields = ['title', 'content', 'distance', 'time']
+	fields = ['title', 'content', 'distance', 'time', 'location']
 	success_url = '/'
 
 	def form_valid(self, form):

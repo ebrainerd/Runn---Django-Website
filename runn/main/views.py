@@ -191,3 +191,4 @@ def search_users_location(request):
 		)
 		context_dict = {'object_list': object_list, 'query': query}
 	return render(request, 'main/search_users_location.html', context_dict)
+

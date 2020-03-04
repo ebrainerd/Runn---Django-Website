@@ -169,15 +169,19 @@ def update_profile(request, pk):
 
 def search(request):
     return render(request, 'main/search.html', {'title': 'Search'})
-def search_users_name(request):
 
-	if request.method == 'GET':
-		query = request.GET.get('q')
-		object_list = Profile.objects.filter(
-			Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query) | Q(user__username__icontains=query)
-		)
-		context_dict = {'object_list': object_list, 'query': query}
-	return render(request, 'main/search_users_name.html', context_dict)
+def search_users_name(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        object_list = find_user_by_first_and_last_name(query)
+    context_dict = {'object_list': object_list, 'query': query}
+    return render(request, 'main/search_users_name.html', context_dict)
+
+def find_user_by_first_and_last_name(query_name):
+    qs = Profile.objects.all()
+    for term in query_name.split():
+        qs = qs.filter(Q(user__first_name__icontains = term) | Q(user__last_name__icontains = term) )
+    return qs
 
 def search_users_location(request):
 	if request.method == 'GET':

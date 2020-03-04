@@ -12,7 +12,7 @@
 
 {% for Profile in object_list %}
 <li>
-    <a class="mr-2" href="{% url 'user-profile' pk=Profile.pk %}"> Name: {{Profile.user.first_name}}, {{Profile.user.last_name}} Username: {{Profile.user.username }}</a>
+    <a class="mr-2" href="{% url 'user-profile' pk=Profile.pk %}"> Name: {{Profile.user.first_name}}, {{Profile.user.last_name}} Username: {{Profile.user.username }},</a>
     <br>{{"Location: "}} {{Profile.location }}
 </li>
 <br>

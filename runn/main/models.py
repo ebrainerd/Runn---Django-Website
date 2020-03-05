@@ -19,6 +19,14 @@ class ProfileManager(models.Manager):
             is_following = True
         return profile_, is_following
 
+    def update_mileages(self, user):
+        total = 0.0
+        posts = Post.objects.filter(author=user.profile)
+        for post in posts:
+            total += post.distance
+        user.profile.total_mileage = total
+        user.profile.save()
+
 
 # https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#extending-the-existing-user-model
 # https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
@@ -31,14 +39,6 @@ class Profile(models.Model):
     total_mileage = models.FloatField(default=0.0)
 
     objects = ProfileManager()
-
-    def update_mileages(self):
-        total = 0.0
-        posts = Post.objects.filter(author=self)
-        for post in posts:
-            total += post.distance
-        self.total_mileage = total
-        self.save()
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name

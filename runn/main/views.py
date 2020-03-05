@@ -37,7 +37,7 @@ class PostListView(ListView):
             return render(request, 'main/home.html', {'posts': qs})
 
         user = request.user
-        user.profile.update_mileages()
+        Profile.objects.update_mileages(user)
         is_following_user_ids = [x.user.id for x in user.is_following.all()]
         qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
         if len(qs) == 0:

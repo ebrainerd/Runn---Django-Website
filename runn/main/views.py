@@ -22,7 +22,7 @@ class PostListView(ListView):
     def get(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated:
             qs = Post.objects.all().order_by('-date_posted')
-            messages.info(self.request, "You are not logged in. Currently displaying all posts.")
+            messages.info(self.request, "You are not logged in. Displaying all posts.")
             return render(request, 'main/home.html', {'posts': qs})
 
         user = request.user
@@ -32,8 +32,23 @@ class PostListView(ListView):
         if len(qs) == 0:
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
                           + "until one of the users you follow makes a post.")
-        return render(request, 'main/home.html', {'posts': qs})
-      
+        return render(request, 'main/home.html', {'posts': qs, 'user': user})
+
+
+class PostListViewProfile(ListView):
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            user = request.user
+            Profile.objects.update_mileages(user)
+            user_posts = Post.objects.filter(author=user.profile).order_by('-date_posted')
+            if len(user_posts) == 0:
+                messages.info(self.request, "Post something!")
+            return render(request, 'main/profile.html', {'posts': user_posts, 'user': user})
+
+        else:
+            messages.info(self.request, "Login to use see your friends' updates")
+            return render(request, 'main/profile.html', {'posts': {}})
+
 
 class PostDetailView(DetailView):
     model = Post
@@ -74,7 +89,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-      
+
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
@@ -89,7 +104,7 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
-  
+
 
 def register(request):
     if request.method == 'POST':
@@ -109,26 +124,6 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form': form})
-
-
-# Class Based View for Profile
-class ProfileDetailView(DetailView):
-    template_name = 'main/profile.html'
-
-    def get_object(self):
-        pk = self.kwargs.get('pk')
-        if pk is None:
-            raise Http404
-        return get_object_or_404(User, id=pk, is_active=True)
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
-        user = context['user']
-        is_following = False
-        if user.profile in self.request.user.is_following.all():
-            is_following = True
-        context['is_following'] = is_following
-        return context
 
 
 class ProfileFollowToggle(LoginRequiredMixin, View):
@@ -167,9 +162,10 @@ def update_profile(request, pk):
 
     return render(request, 'main/profile_update.html', context)
 
-  
+
 def search(request):
     return render(request, 'main/search.html', {'title': 'Search'})
+
 
 def search_users_name(request):
     if request.method == 'GET':
@@ -178,17 +174,20 @@ def search_users_name(request):
     context_dict = {'object_list': object_list, 'query': query}
     return render(request, 'main/search_users_name.html', context_dict)
 
+
 def find_user_by_first_and_last_name(query_name):
     qs = Profile.objects.all()
     for term in query_name.split():
-        qs = qs.filter(Q(user__first_name__icontains = term) | Q(user__last_name__icontains = term) | Q(user__username__icontains = term) )
+        qs = qs.filter(Q(user__first_name__icontains=term) | Q(user__last_name__icontains=term) | Q(
+            user__username__icontains=term))
     return qs
 
+
 def search_users_location(request):
-	if request.method == 'GET':
-		query = request.GET.get('q')
-		object_list = Profile.objects.filter(
-			Q(location__icontains = query)
-		)
-		context_dict = {'object_list': object_list, 'query': query}
-	return render(request, 'main/search_users_location.html', context_dict)
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        object_list = Profile.objects.filter(
+            Q(location__icontains=query)
+        )
+        context_dict = {'object_list': object_list, 'query': query}
+    return render(request, 'main/search_users_location.html', context_dict)

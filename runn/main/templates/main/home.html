@@ -9,7 +9,7 @@
             <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
             <small class="text-muted">{{ post.date_posted }}</small>
         </div>
-        <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}"><u>{{ post.title }}</u></a></h2>
+        <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}">{{ post.title }}</a></h2>
 
         <p class="article-content">{{ post.content }}</p>
         <div class="row">
@@ -20,7 +20,11 @@
             <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
         </div>
         <div>
-            <a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+			{% if post.comments.count == 0 %}
+				<a href="{% url 'post-detail' pk=post.pk %}">Leave a comment</a>
+			{% else %}
+            	<a href="{% url 'post-detail' pk=post.pk %}">View comments</a>
+			{% endif %}
         </div>
 
     </div>

@@ -8,8 +8,9 @@ from .views import (
     PostCreateView,
     PostUpdateView,
     PostDeleteView,
-    ProfileDetailView,
+    # ProfileDetailView,
     ProfileFollowToggle,
+    PostListViewProfile,
 )
 from . import views
 
@@ -21,7 +22,8 @@ urlpatterns = [
     # temp_name path might be wrong
     path('logout/', auth_views.LogoutView.as_view(template_name='main/logout.html'), name="logout"),
     # path('profile/<int:pk>/', views.profile, name="user-profile"),
-    path('profile/<int:pk>/', ProfileDetailView.as_view(), name="user-profile"),
+    # path('profile/<int:pk>/', ProfileDetailView.as_view(), name="user-profile"),
+    path('profile/<int:pk>/', PostListViewProfile.as_view(), name="user-profile"),
     path('profile/<int:pk>/update', views.update_profile, name="update-profile"),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/new/', login_required(PostCreateView.as_view()), name='post-create'),
@@ -32,4 +34,10 @@ urlpatterns = [
     path('search/', views.search, name="main-search"),
     path('search_users_name/', views.search_users_name, name="main-search-users-name"),
     path('search_users_location/', views.search_users_location, name="main-search-users-location"),
+    # path('Media', ),
 ]
+
+# urlpatterns = patterns('',
+#                (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+#                  {'document_root': settings.MEDIA_ROOT}),
+#               )

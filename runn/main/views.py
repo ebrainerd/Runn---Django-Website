@@ -17,16 +17,6 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentF
 from .models import Post, Profile, Comment
 from django.db.models import Q
 
-# class PostListView(ListView):
-#     template_name = 'main/home.html'
-#     context_object_name = 'posts'
-
-#     def get_queryset(self):
-#         if self.request.user.is_authenticated:
-#             return Post.objects.all().order_by('-date_posted')
-#         else:
-#             messages.info(self.request, "You are not logged in. Currently displaying posts in reverse chrono order.")
-#             return Post.objects.all().order_by('date_posted')
 
 class PostListView(ListView):
     def get(self, request, *args, **kwargs):
@@ -36,15 +26,18 @@ class PostListView(ListView):
             return render(request, 'main/home.html', {'posts': qs})
 
         user = request.user
+        Profile.objects.update_mileages(user)
         is_following_user_ids = [x.user.id for x in user.is_following.all()]
         qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
         if len(qs) == 0:
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
                           + "until one of the users you follow makes a post.")
         return render(request, 'main/home.html', {'posts': qs})
+      
 
 class PostDetailView(DetailView):
     model = Post
+
 
 class PostCreateView(CreateView):
     model = Post
@@ -54,6 +47,7 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
+
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
@@ -69,6 +63,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/'
@@ -79,6 +74,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+      
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
@@ -93,6 +89,7 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
+  
 
 def register(request):
     if request.method == 'POST':
@@ -113,6 +110,7 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form': form})
 
+
 # Class Based View for Profile
 class ProfileDetailView(DetailView):
     template_name = 'main/profile.html'
@@ -132,12 +130,14 @@ class ProfileDetailView(DetailView):
         context['is_following'] = is_following
         return context
 
+
 class ProfileFollowToggle(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         username_to_toggle = request.POST.get("username")
         profile_, is_following = Profile.objects.toggle_follow(request.user, username_to_toggle)
 
         return redirect('user-profile', profile_.user.id)
+
 
 @login_required
 def update_profile(request, pk):
@@ -167,6 +167,7 @@ def update_profile(request, pk):
 
     return render(request, 'main/profile_update.html', context)
 
+  
 def search(request):
     return render(request, 'main/search.html', {'title': 'Search'})
 
@@ -191,4 +192,3 @@ def search_users_location(request):
 		)
 		context_dict = {'object_list': object_list, 'query': query}
 	return render(request, 'main/search_users_location.html', context_dict)
-

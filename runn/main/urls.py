@@ -10,7 +10,6 @@ from .views import (
 	PostDeleteView,
     ProfileDetailView,
     ProfileFollowToggle,
-    SearchResultsView
 )
 from . import views
 
@@ -28,7 +27,8 @@ urlpatterns = [
     path('post/<int:pk>/update/', login_required(PostUpdateView.as_view()), name='post-update'),
     path('post/<int:pk>/delete/', login_required(PostDeleteView.as_view()), name='post-delete'),
     path('profile/<int:pk>/profile-follow/', login_required(ProfileFollowToggle.as_view()), name='follow'),
-    path('about/', views.about, name="main-about"),
-    path('search/', SearchResultsView.as_view(), name="main-search"),
     path('post/<int:pk>/comment/', views.add_comment_to_post, name='add_comment_to_post'),
+    path('search/', views.search, name="main-search"),
+    path('search_users_name/', views.search_users_name, name="main-search-users-name"),
+    path('search_users_location/', views.search_users_location, name="main-search-users-location"),
 ]

@@ -4,11 +4,8 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            {% if user.is_staff %}
-            <p class="mr-2">{{% post.author %}}</p>
-            {% else %}
             <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
-            {% endif %}
+            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
         </div>
         <h2 class="article-title"><u>{{ post.title }}</u></h2>
         <p class="article-content">{{ post.content }}</p>
@@ -23,10 +20,16 @@
 <hr>
 <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
 {% for comment in post.comments.all %}
-<div class="comment">
-    <div class="date">{{ comment.date_posted }}</div>
-    <strong><a href="{% url 'user-profile' pk=comment.author.pk %}">{{ comment.author }}</a></strong>
-    <p>{{ comment.content|linebreaks }}</p>
+<div class="col">
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="comment">
+                <div class="date">{{ comment.date_posted|date:"F d, Y" }}</div>
+                <strong><a href="{% url 'user-profile' pk=comment.author.pk %}">{{ comment.author }}</a></strong>
+                <p>{{ comment.content|linebreaks }}</p>
+            </div>
+        </div>
+    </article>
 </div>
 {% empty %}
 <p>No comments here yet :(</p>

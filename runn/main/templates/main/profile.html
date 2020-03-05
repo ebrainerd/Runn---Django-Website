@@ -1,5 +1,5 @@
 {% extends "main/base.html" %}
-{% load crispy_forms_tags %}
+
 {% block content  %}
 
 <style>
@@ -25,7 +25,6 @@
     margin-right: 10%;
 }
 
-
 </style>
 
 <div class="content-section">
@@ -34,22 +33,29 @@
             <div class="row">
                 <div class="col">
                     <h4 class="account-heading" font-family="Roboto">{{ user.profile }}</h4>
-                    <h5 id="Info">Total Distance - <answer>{{ user.profile.total_mileage }} miles</answer></h5>
-                    <h5 id="Info">Location - <answer>{{ user.profile.location }}</answer></h5>
-                    <h5 id="Info">About Me - <answer>{{ user.profile.bio }}</answer></h5>
+                    <h5 id="Info">Total Distance -
+                        <answer>{{ user.profile.total_mileage }} miles</answer>
+                    </h5>
+                    <h5 id="Info">Location -
+                        <answer>{{ user.profile.location }}</answer>
+                    </h5>
+                    <h5 id="Info">About Me -
+                        <answer>{{ user.profile.bio }}</answer>
+                    </h5>
                 </div>
                 {% if request.user.id == user.id %}
                 <div align="right">
                     <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit
                         Profile</a>
                 </div>
+                {% else %}
+                <div align="right">
+                <a class='btn btn-secondary btn-sm mt-1 mb-1'
+                href="#">Follow</a>
+                </div>
+                {% endif %}
             </div>
         </div>
-        {% endif %}
-        {% if user.id != request.user.id %} <!-- Show button if the displayed user is not the logged in user -->
-        <p>{% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following
-            %}</p>
-        {% endif %}
     </div>
 </div>
 
@@ -73,10 +79,8 @@
         <div>
             <a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
         </div>
-
     </div>
 </article>
 {% endfor %}
-
 
 {% endblock content %}

@@ -2,12 +2,14 @@
 
 {% block content %}
 
+<h2 class="account-heading" font-family="Roboto">Home Feed</h2>
+
 {% for post in posts %}
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
             <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
-            <small class="text-muted">{{ post.date_posted }}</small>
+            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
         </div>
         <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}">{{ post.title }}</a></h2>
 

@@ -18,14 +18,30 @@ from .models import Post, Profile, Comment
 from django.db.models import Q
 
 
-class PostListView(ListView):
+class ProfileDetailView(DetailView):
     def get(self, request, *args, **kwargs):
-        if not self.request.user.is_authenticated:
+        pk = self.kwargs.get('pk')
+
+        if pk == request.user.pk:
+            user_to_view = request.user
+        elif pk is None:
+            raise Http404
+        else:
+            user_to_view = get_object_or_404(User, id=pk, is_active=True)
+
+        posts = Post.objects.filter(author=user_to_view.profile)
+        print(posts)
+        return render(request, 'main/profile.html', {'posts': posts, 'user': user_to_view})
+
+
+class PostListViewHome(ListView):
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        if not user.is_authenticated:
             qs = Post.objects.all().order_by('-date_posted')
             messages.info(self.request, "You are not logged in. Displaying all posts.")
             return render(request, 'main/home.html', {'posts': qs})
 
-        user = request.user
         Profile.objects.update_mileages(user)
         is_following_user_ids = [x.user.id for x in user.is_following.all()]
         qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
@@ -33,21 +49,6 @@ class PostListView(ListView):
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
                           + "until one of the users you follow makes a post.")
         return render(request, 'main/home.html', {'posts': qs, 'user': user})
-
-
-class PostListViewProfile(ListView):
-    def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            user = request.user
-            Profile.objects.update_mileages(user)
-            user_posts = Post.objects.filter(author=user.profile).order_by('-date_posted')
-            if len(user_posts) == 0:
-                messages.info(self.request, "Post something!")
-            return render(request, 'main/profile.html', {'posts': user_posts, 'user': user})
-
-        else:
-            messages.info(self.request, "Login to use see your friends' updates")
-            return render(request, 'main/profile.html', {'posts': {}})
 
 
 class PostDetailView(DetailView):

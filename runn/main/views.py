@@ -17,6 +17,7 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentF
 from .models import Post, Profile, Comment
 from django.db.models import Q
 
+
 # class PostListView(ListView):
 #     template_name = 'main/home.html'
 #     context_object_name = 'posts'
@@ -33,7 +34,7 @@ class PostListView(ListView):
         if not self.request.user.is_authenticated:
             qs = Post.objects.all().order_by('-date_posted')
             messages.info(self.request, "You are not logged in. Currently displaying all posts.")
-            return render(request, 'main/home.html', {'posts':qs})
+            return render(request, 'main/home.html', {'posts': qs})
 
         user = request.user
         user.profile.update_mileages()
@@ -41,11 +42,13 @@ class PostListView(ListView):
         qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
         if len(qs) == 0:
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
-                + "until one of the users you follow makes a post.")
-        return render(request, 'main/home.html', {'posts':qs})
+                          + "until one of the users you follow makes a post.")
+        return render(request, 'main/home.html', {'posts': qs})
+
 
 class PostDetailView(DetailView):
     model = Post
+
 
 class PostCreateView(CreateView):
     model = Post
@@ -55,6 +58,7 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
+
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
@@ -70,6 +74,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/'
@@ -80,8 +85,10 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+
 def about(request):
     return render(request, 'main/about.html', {'title': 'About'})
+
 
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -96,7 +103,8 @@ def add_comment_to_post(request, pk):
             return redirect('post-detail', pk=post.pk)
     else:
         form = CommentForm()
-    return render(request, 'main/add_comment_to_post.html', {'form': form, 'post':post})
+    return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
+
 
 def register(request):
     if request.method == 'POST':
@@ -115,7 +123,8 @@ def register(request):
             return redirect('main-home')
     else:
         form = UserRegisterForm()
-    return render(request, 'main/register.html', {'form' : form})
+    return render(request, 'main/register.html', {'form': form})
+
 
 # Class Based View for Profile
 class ProfileDetailView(DetailView):
@@ -136,6 +145,7 @@ class ProfileDetailView(DetailView):
         context['is_following'] = is_following
         return context
 
+
 class ProfileFollowToggle(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         username_to_toggle = request.POST.get("username")
@@ -143,12 +153,13 @@ class ProfileFollowToggle(LoginRequiredMixin, View):
 
         return redirect('user-profile', profile_.user.id)
 
+
 @login_required
 def update_profile(request, pk):
-    if not request.user.id == pk: # pk is the primary key of the user being edited
+    if not request.user.id == pk:  # pk is the primary key of the user being edited
         messages.info(request, f'You cannot edit another user\'s account.')
         return redirect('user-profile', pk)
-        
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
@@ -171,14 +182,16 @@ def update_profile(request, pk):
 
     return render(request, 'main/profile_update.html', context)
 
+
 class SearchResultsView(ListView):
     model = Profile
     template_name = 'main/search.html'
-    #queryset = Run.objects.filter(title__icontains = 'run')
+
+    # queryset = Run.objects.filter(title__icontains = 'run')
     def get_queryset(self):
         query = self.request.GET.get('q')
         object_list = Profile.objects.filter(
             Q(first_name__icontains=query)
-            #Q(author__icontains = query)
+            # Q(author__icontains = query)
         )
         return object_list

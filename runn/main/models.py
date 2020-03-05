@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.db.models import Sum, OuterRef, Subquery
 
 
 class ProfileManager(models.Manager):
@@ -36,10 +35,9 @@ class Profile(models.Model):
     def update_mileages(self):
         total = 0.0
         posts = Post.objects.filter(author=self)
-        print(len(posts))
         for post in posts:
             total += post.distance
-        self.total_mileage=total
+        self.total_mileage = total
         self.save()
 
     def __str__(self):

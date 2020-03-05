@@ -39,7 +39,7 @@
             <div class="navbar-nav">
               {% if user.is_authenticated %}
                 <li {% if "/profile/" == request.path|slice:":9" %}class="nav-item active"{% endif %}>
-                  <a class="nav-item nav-link" href="{% url 'update-profile' request.user.id %}">Profile</a>
+                  <a class="nav-item nav-link" href="{% url 'user-profile' request.user.id %}">Profile</a>
                 </li>
                 <li {% if "/logout/" == request.path %}class="nav-item active"{% endif %}>
                   <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>

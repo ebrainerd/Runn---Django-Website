@@ -33,7 +33,7 @@ class PostListView(ListView):
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
                           + "until one of the users you follow makes a post.")
         return render(request, 'main/home.html', {'posts': qs})
-
+      
 
 class PostDetailView(DetailView):
     model = Post
@@ -74,11 +74,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-
-def about(request):
-    return render(request, 'main/about.html', {'title': 'About'})
-
-
+      
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
@@ -93,7 +89,7 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'main/add_comment_to_post.html', {'form': form, 'post': post})
-
+  
 
 def register(request):
     if request.method == 'POST':
@@ -171,16 +167,28 @@ def update_profile(request, pk):
 
     return render(request, 'main/profile_update.html', context)
 
+  
+def search(request):
+    return render(request, 'main/search.html', {'title': 'Search'})
 
-class SearchResultsView(ListView):
-    model = Profile
-    template_name = 'main/search.html'
+def search_users_name(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        object_list = find_user_by_first_and_last_name(query)
+    context_dict = {'object_list': object_list, 'query': query}
+    return render(request, 'main/search_users_name.html', context_dict)
 
-    # queryset = Run.objects.filter(title__icontains = 'run')
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        object_list = Profile.objects.filter(
-            Q(first_name__icontains=query)
-            # Q(author__icontains = query)
-        )
-        return object_list
+def find_user_by_first_and_last_name(query_name):
+    qs = Profile.objects.all()
+    for term in query_name.split():
+        qs = qs.filter(Q(user__first_name__icontains = term) | Q(user__last_name__icontains = term) | Q(user__username__icontains = term) )
+    return qs
+
+def search_users_location(request):
+	if request.method == 'GET':
+		query = request.GET.get('q')
+		object_list = Profile.objects.filter(
+			Q(location__icontains = query)
+		)
+		context_dict = {'object_list': object_list, 'query': query}
+	return render(request, 'main/search_users_location.html', context_dict)

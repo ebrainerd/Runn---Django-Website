@@ -125,7 +125,7 @@ class ProfileDetailView(DetailView):
         context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
         user = context['user']
         is_following = False
-        if user.profile in self.request.user.is_following.all():
+        if (self.request.user.is_authenticated) and user.profile in self.request.user.is_following.all():
             is_following = True
         context['is_following'] = is_following
         return context
@@ -185,10 +185,11 @@ def find_user_by_first_and_last_name(query_name):
     return qs
 
 def search_users_location(request):
-	if request.method == 'GET':
-		query = request.GET.get('q')
-		object_list = Profile.objects.filter(
-			Q(location__icontains = query)
-		)
-		context_dict = {'object_list': object_list, 'query': query}
-	return render(request, 'main/search_users_location.html', context_dict)
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        object_list = Profile.objects.filter(
+            Q(location__icontains = query)
+        )
+        context_dict = {'object_list': object_list, 'query': query}
+    return render(request, 'main/search_users_location.html', context_dict)
+    

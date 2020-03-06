@@ -5,32 +5,32 @@
 <h2 class="account-heading" font-family="Roboto">Home Feed</h2>
 
 {% for post in posts %}
-<article class="media content-section">
-    <div class="media-body">
-        <div class="article-metadata">
-			{% if user.is_authenticated %}
-            <a class="mr-2" href="{% url 'user-profile' pk=post.pk %}">{{ post.author }}</a>
-            {% else %}
-            <h5>{{ post.author }}</h5>
-            {% endif %}
-            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-        </div>
-        <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}">{{ post.title }}</a></h2>
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+    			{% if user.is_authenticated %}
+                    <a class="mr-2" href="{% url 'user-profile' pk=post.pk %}">{{ post.author }}</a>
+                {% else %}
+                    <h5>{{ post.author }}</h5>
+                {% endif %}
+                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}">{{ post.title }}</a></h2>
 
-        <p class="article-content">{{ post.content }}</p>
-        <div class="row">
-            <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
-            <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
-            <div class="clearfix visible-xs-block"></div>
-            <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
-            <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
-        </div>
-        <div>
-			<a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
-        </div>
+            <p class="article-content">{{ post.content }}</p>
+            <div class="row">
+                <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
+                <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
+                <div class="clearfix visible-xs-block"></div>
+                <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
+                <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
+            </div>
+            <div>
+    			<a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+            </div>
 
-    </div>
-</article>
+        </div>
+    </article>
 {% endfor %}
 
 {% endblock content %}

@@ -37,35 +37,35 @@
 
 
 {% for post in posts %}
-<article class="media content-section">
-    <div class="media-body">
-        <div class="article-metadata">
-            <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
-            <small class="text-muted">{{ post.date_posted }}</small>
-        </div>
-        <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}">{{ post.title }}</a></h2>
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
+                <small class="text-muted">{{ post.date_posted }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}">{{ post.title }}</a></h2>
 
-        <p class="article-content">{{ post.content }}</p>
-        <div class="row">
-            <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
-            <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
-            <div class="clearfix visible-xs-block"></div>
-            <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
-            <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
+            <p class="article-content">{{ post.content }}</p>
+            <div class="row">
+                <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
+                <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
+                <div class="clearfix visible-xs-block"></div>
+                <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
+                <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
+            </div>
+            <div>
+                {% if user.is_authenticated %}
+    				{% if post.comments.count == 0 %}
+    					<a href="{% url 'post-detail' pk=post.pk %}">Leave a comment</a>
+    				{% else %}
+                		<a href="{% url 'post-detail' pk=post.pk %}">View comments</a>
+    				{% endif %}
+    			{% else %}
+    				<a>Sign in to comment</a>
+    			{% endif %}
+            </div>
         </div>
-        <div>
-            {% if user.is_authenticated %}
-				{% if post.comments.count == 0 %}
-					<a href="{% url 'post-detail' pk=post.pk %}">Leave a comment</a>
-				{% else %}
-            		<a href="{% url 'post-detail' pk=post.pk %}">View comments</a>
-				{% endif %}
-			{% else %}
-				<a>Sign in to comment</a>
-			{% endif %}
-        </div>
-    </div>
-</article>
+    </article>
 {% endfor %}
 
 {% endblock content %}

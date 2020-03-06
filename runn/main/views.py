@@ -29,7 +29,7 @@ class ProfileDetailView(DetailView):
         else:
             user_to_view = get_object_or_404(User, id=pk, is_active=True)
 
-        posts = reversed(Post.objects.filter(author=user_to_view.profile))
+        posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
         is_following = False
         if self.request.user.is_authenticated and user_to_view.profile in self.request.user.is_following.all():
             is_following = True

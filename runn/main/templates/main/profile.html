@@ -9,29 +9,77 @@
     text-align: left;
     font-family: Roboto;
 }
+
+
+
+
+
 </style>
+
+<!--New Profile Page Style-->
+
+<!--<div class="content-section">-->
+<!--<div class="media">-->
+<!--<div class="media-body">-->
+<!--<div class="row">-->
+<!--<div class="col">-->
+<!--<h4 class="account-heading" font-family="Roboto">{{ user.profile }}</h4>-->
+<!--<h5 id="Info">Total Distance - {{ user.profile.total_mileage }} miles</h5>-->
+<!--<h5 id="Info">Location - {{ user.profile.location }}</h5>-->
+<!--<h5 id="Info">About Me - {{ user.profile.bio }}</h5>-->
+<!--</div>-->
+<!--{% if request.user.id == user.id %}-->
+<!--<div align="right">-->
+<!--<a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit-->
+<!--Profile</a>-->
+<!--</div>-->
+<!--{% else %}-->
+<!--<div align="right">-->
+<!--<a class='btn btn-secondary btn-sm mt-1 mb-1'-->
+<!--href="#">Follow</a>-->
+<!--</div>-->
+<!--{% endif %}-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--Original Profile Page Style-->
 
 <div class="content-section">
     <div class="media">
         <div class="media-body">
             <div class="row">
                 <div class="col">
-                    <h4 class="account-heading" font-family="Roboto">{{ user.profile }}</h4>
-                    <h5 id="Info">Total Distance - {{ user.profile.total_mileage }} miles</h5>
-                    <h5 id="Info">Location - {{ user.profile.location }}</h5>
-                    <h5 id="Info">About Me - {{ user.profile.bio }}</h5>
+                    <h2 class="account-heading">{{ user.username }}
+                        {% if request.user.id == user.id %}
+                        <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">
+                            Edit Profile</a>
+                        {% else %}
+                        <a class='btn btn-secondary btn-sm mt-1 mb-1' href="#">Follow</a>
+                        {% endif %}
+                    </h2>
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-1">Total Mileage</legend>
+                        {{ user.profile.total_mileage }}
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-1">Email</legend>
+                        {{ user.email }}
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-1">Name</legend>
+                        {{ user.first_name }} {{ user.last_name }}
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-1">Location</legend>
+                        {{ user.profile.location }}
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-1">Bio</legend>
+                        {{ user.profile.bio }}
+                    </fieldset>
                 </div>
-                {% if request.user.id == user.id %}
-                <div align="right">
-                    <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit
-                        Profile</a>
-                </div>
-                {% else %}
-                <div align="right">
-                <a class='btn btn-secondary btn-sm mt-1 mb-1'
-                href="#">Follow</a>
-                </div>
-                {% endif %}
             </div>
         </div>
     </div>

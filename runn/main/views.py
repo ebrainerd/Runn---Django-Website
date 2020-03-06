@@ -18,7 +18,7 @@ from .models import Post, Profile
 from django.db.models import Q
 
 
-class ProfileDetailView(DetailView):
+class PostListView(ListView):
     def get(self, request, *args, **kwargs):
 
         pk = self.kwargs.get('pk')
@@ -37,23 +37,6 @@ class ProfileDetailView(DetailView):
         return render(request, 'main/profile.html', {'posts': posts,
                                                      'user': user_to_view,
                                                      'is_following': is_following})
-
-
-class PostListViewHome(ListView):
-    def get(self, request, *args, **kwargs):
-        user = self.request.user
-        if not user.is_authenticated:
-            qs = Post.objects.all().order_by('-date_posted')
-            messages.info(self.request, "You are not logged in. Displaying all posts.")
-            return render(request, 'main/home.html', {'posts': qs})
-
-        Profile.objects.update_mileages(user)
-        is_following_user_ids = [x.user.id for x in user.is_following.all()]
-        qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
-        if len(qs) == 0:
-            messages.info(self.request, "There are no posts available to show. Follow other users or wait "
-                          + "until one of the users you follow makes a post.")
-        return render(request, 'main/home.html', {'posts': qs, 'user': user})
 
 
 class PostDetailView(DetailView):
@@ -130,6 +113,26 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'main/register.html', {'form': form})
+
+
+# Class Based View for Profile
+class ProfileDetailView(DetailView):
+    template_name = 'main/profile.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        if pk is None:
+            raise Http404
+        return get_object_or_404(User, id=pk, is_active=True)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
+        user = context['user']
+        is_following = False
+        if user.profile in self.request.user.is_following.all():
+            is_following = True
+        context['is_following'] = is_following
+        return context
 
 
 class ProfileFollowToggle(LoginRequiredMixin, View):

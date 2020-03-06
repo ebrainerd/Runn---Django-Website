@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import Http404
 from django.views.generic import (
     View,
     ListView,
@@ -14,23 +14,22 @@ from django.views.generic import (
 )
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
-from .models import Post, Profile, Comment
+from .models import Post, Profile
 from django.db.models import Q
 
 
 class ProfileDetailView(DetailView):
     def get(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk')
 
+        pk = self.kwargs.get('pk')
         if pk == request.user.pk:
             user_to_view = request.user
         elif pk is None:
-            raise Http404
+            raise Http404("Could not get user.")
         else:
             user_to_view = get_object_or_404(User, id=pk, is_active=True)
 
         posts = Post.objects.filter(author=user_to_view.profile)
-        print(posts)
         return render(request, 'main/profile.html', {'posts': posts, 'user': user_to_view})
 
 
@@ -48,7 +47,7 @@ class PostListViewHome(ListView):
         if len(qs) == 0:
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
                           + "until one of the users you follow makes a post.")
-        return render(request, 'main/home.html', {'posts': qs, 'user': user})
+        return render(request, 'main/home.html', {'posts': qs})
 
 
 class PostDetailView(DetailView):

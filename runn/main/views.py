@@ -125,7 +125,7 @@ class ProfileDetailView(DetailView):
         context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
         user = context['user']
         is_following = False
-        if user.profile in self.request.user.is_following.all():
+        if (self.request.user.is_authenticated) and user.profile in self.request.user.is_following.all():
             is_following = True
         context['is_following'] = is_following
         return context

@@ -25,7 +25,9 @@
 	  </div>
 	</article>
 	<hr>
-		<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+		{% if request.user.is_authenticated %}
+			<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+		{% endif %}
 		{% for comment in post.comments.all %}
 	    <div class="comment">
         <div class="date">{{ comment.date_posted }}</div>

@@ -2,29 +2,13 @@
 
 {% block content  %}
 
+<!--CSS Styling Legend-->
 <style>
 #Info {
     color: black;
     text-align: left;
     font-family: Roboto;
 }
-
-#Info answer {
-    color: black;
-    text-align: left;
-    font-family: Georgia, serif;
-}
-
-#outer {
-    height: 10%;
-}
-
-#inner {
-    height: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-}
-
 </style>
 
 <div class="content-section">
@@ -33,15 +17,9 @@
             <div class="row">
                 <div class="col">
                     <h4 class="account-heading" font-family="Roboto">{{ user.profile }}</h4>
-                    <h5 id="Info">Total Distance -
-                        <answer>{{ user.profile.total_mileage }} miles</answer>
-                    </h5>
-                    <h5 id="Info">Location -
-                        <answer>{{ user.profile.location }}</answer>
-                    </h5>
-                    <h5 id="Info">About Me -
-                        <answer>{{ user.profile.bio }}</answer>
-                    </h5>
+                    <h5 id="Info">Total Distance - {{ user.profile.total_mileage }} miles</h5>
+                    <h5 id="Info">Location - {{ user.profile.location }}</h5>
+                    <h5 id="Info">About Me - {{ user.profile.bio }}</h5>
                 </div>
                 {% if request.user.id == user.id %}
                 <div align="right">

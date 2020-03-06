@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import connections
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -54,6 +53,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
         # TODO: Also have them follow themselves so they can see their own posts on home feed. 
         instance.profile.followers.add(instance)
+
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

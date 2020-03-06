@@ -1,39 +1,71 @@
 {% extends "main/base.html" %}
-{% load crispy_forms_tags %}
+
 {% block content  %}
+
+<!--CSS Styling Legend-->
+<style>
+#Info {
+    color: black;
+    text-align: left;
+    font-family: Roboto;
+}
+</style>
+
+<!--New Profile Page Style-->
+
 <div class="content-section">
     <div class="media">
         <div class="media-body">
-            <h2 class="account-heading">Profile: {{ user.username }}</h2>
-            {% if request.user.id == user.id %}
-            <!-- Show button if the profile's user id is the same as the logged in user's id  -->
-            <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a>
-            {% endif %}
-            {% if request.user.is_authenticated and user.id != request.user.id %} <!-- Show button if the displayed user is not the logged in user -->
-            <p>{% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following
-                %}</p>
-            {% endif %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Total Mileage</legend>
-                {{ user.profile.total_mileage }}
-            </fieldset>
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Email</legend>
-                {{ user.email }}
-            </fieldset>
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Name</legend>
-                {{ user.first_name }} {{ user.last_name }}
-            </fieldset>
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Location</legend>
-                {{ user.profile.location }}
-            </fieldset>
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Bio</legend>
-                {{ user.profile.bio }}
-            </fieldset>
+            <div class="row">
+                <div class="col">
+                    <h4 class="account-heading" font-family="Roboto">{{ user.profile }}</h4>
+                    <h5 id="Info">Total Distance - {{ user.profile.total_mileage }} miles</h5>
+                    <h5 id="Info">Location - {{ user.profile.location }}</h5>
+                    <h5 id="Info">About Me - {{ user.profile.bio }}</h5>
+                </div>
+                <div align="right">
+                    {% if request.user.id == user.id %}
+                    <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a>
+                    {% else %}
+                    {% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following %}
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-    <h1>
-        {% endblock content %}
+</div>
+
+
+{% for post in posts %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
+            <small class="text-muted">{{ post.date_posted }}</small>
+        </div>
+        <h2><a class="article-title" href="{% url 'post-detail' post.run_id %}">{{ post.title }}</a></h2>
+
+        <p class="article-content">{{ post.content }}</p>
+        <div class="row">
+            <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
+            <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
+            <div class="clearfix visible-xs-block"></div>
+            <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
+            <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
+        </div>
+        <div>
+            {% if user.is_authenticated %}
+				{% if post.comments.count == 0 %}
+					<a href="{% url 'post-detail' pk=post.pk %}">Leave a comment</a>
+				{% else %}
+            		<a href="{% url 'post-detail' pk=post.pk %}">View comments</a>
+				{% endif %}
+			{% else %}
+				<a>Sign in to comment</a>
+			{% endif %}
+        </div>
+    </div>
+</article>
+{% endfor %}
+
+{% endblock content %}

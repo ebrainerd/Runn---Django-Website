@@ -47,7 +47,7 @@ class PostListViewHome(ListView):
         if len(qs) == 0:
             messages.info(self.request, "There are no posts available to show. Follow other users or wait "
                           + "until one of the users you follow makes a post.")
-        return render(request, 'main/home.html', {'posts': qs})
+        return render(request, 'main/home.html', {'posts': qs, 'user': user})
 
 
 class PostDetailView(DetailView):

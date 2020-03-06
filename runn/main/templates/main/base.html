@@ -35,12 +35,14 @@
                 <li {% if "/" == request.path %}class="nav-item active"{% endif %}>
                 <a class="nav-link" href="{% url 'main-home' %}">Home<span class="sr-only">(current)</span></a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'main-search' %}">Search</a>
                 </li>
+                {% endif %}
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <li {% if "/profile/" == request.path|slice:":9" %}class="nav-item active"{% endif %}>
+                    <li> {% if "/profile/" == request.path|slice:":9" %}class="nav-item active"{% endif %}
                     <a class="nav-item nav-link" href="{% url 'user-profile' request.user.id %}">Profile</a>
                     </li>
                     <li {% if "/logout/" == request.path %}class="nav-item active"{% endif %}>

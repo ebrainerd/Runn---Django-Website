@@ -64,9 +64,25 @@
     </nav>
 </header>
 
-
-{% block content %}{% endblock %}
-
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+              </div>
+              {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock content %}
+        </div>
+        <div class="col-md-4">
+        <div class="content-section">
+            {% block sidebar %}{% endblock sidebar %}
+        </div>
+      </div>
+    </div>
+</main>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -25,9 +25,9 @@
                 </div>
                 <div align="right">
                     {% if request.user.id == user.id %}
-                    <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a>
+                        <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'update-profile' pk=user.id %}">Edit Profile</a>
                     {% else %}
-                    {% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following %}
+                        {% include 'main/follow_form.html' with username=user.username user_id=user.id is_following=is_following %}
                     {% endif %}
                 </div>
             </div>

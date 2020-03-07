@@ -44,7 +44,9 @@ class PostListViewHome(ListView):
         user = self.request.user
         if not user.is_authenticated:
             qs = Post.objects.all().order_by('-date_posted')
-            messages.info(self.request, "You are not logged in. Displaying all posts.")
+            message = "You are not logged in. Displaying all posts by default. "\
+                        + "Please sign in or register to search, view user profiles, and comment."
+            messages.info(self.request, message)
             return render(request, 'main/home.html', {'posts': qs})
 
         Profile.objects.update_mileages(user)

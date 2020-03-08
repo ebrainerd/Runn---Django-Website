@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class ProfileManager(models.Manager):
@@ -63,7 +64,9 @@ class Post(models.Model):
     run_id = models.AutoField(primary_key=True)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.TextField(max_length=100, blank=False, default="")
-    distance = models.FloatField(default=0.0, blank=False)
+    error_messages = {""}
+    distance = models.FloatField(default=0.0, blank=False, 
+    	validators=[MinValueValidator(0.1)])
     time = models.TimeField(blank=False, help_text='Enter time in the form "HH:MM:SS".')
     date_posted = models.DateTimeField(default=timezone.now)
     location = models.TextField(max_length=100, blank=False, default="")

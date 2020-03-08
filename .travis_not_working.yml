@@ -1,0 +1,18 @@
+language: python
+python:
+  - "3.7"
+addons:
+  chrome: stable
+before script:
+  - wget https://chromedriver.storage.googleapis.com/81.0.4044.20/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python2.7.12/bin/
+  - export CHROME_BIN=chromium-browser
+install:
+  - pip install django
+  - pip install django-nose
+  - pip install selenium
+  - pip install coverage
+script:
+  - python3 manage.py makemigrations
+  - python3 manage.py migrate
+  - ./manage.py test --with-coverage

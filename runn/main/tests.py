@@ -38,7 +38,7 @@ class RunPostTestCase(TestCase):
 
     def setUp(self):
         # Arrange and Act
-        my_user = User.objects.create_user(username='johnlennon123', first_name='John', 
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
             last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
         my_user.save()
 

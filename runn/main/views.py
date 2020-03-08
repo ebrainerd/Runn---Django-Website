@@ -16,7 +16,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from .models import Post, Profile
 from django.db.models import Q
-from main.utils import statistics_last_7_days
+from main.utils import user_statistics
 
 
 class ProfileDetailView(DetailView):
@@ -36,7 +36,7 @@ class ProfileDetailView(DetailView):
             is_following = True
 
         miles_last_7_days, time_last_7_days, avg_pace_last_7_days, longest_run_last_7_days, fastest_pace_last_7_days = \
-            statistics_last_7_days(self.request.user)
+            user_statistics(self.request.user, 99)
 
         context = {}
         context['posts'] = posts
@@ -51,7 +51,7 @@ class ProfileDetailView(DetailView):
         # 'ou_' = other user's statistics (evaluated when viewing other user's profiles)
         if user_to_view.id != request.user.id:
             miles_last_7_days, time_last_7_days, avg_pace_last_7_days, longest_run_last_7_days, fastest_pace_last_7_days = \
-                statistics_last_7_days(user_to_view)
+                user_statistics(user_to_view, 9999)
             context['ou_miles_last_7_days'] = miles_last_7_days
             context['ou_time_last_7_days'] = time_last_7_days
             context['ou_avg_pace_last_7_days'] = avg_pace_last_7_days

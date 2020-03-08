@@ -10,6 +10,12 @@
 	            <h5>{{ post.author }}</h5>
 	            {% endif %}
 	            <small class="text-muted">{{ post.date_posted }}</small>
+	            {% if post.author == user.profile %}
+			      	<div>
+			      		<a class='btn btn-info btn-sm mt-1 mb-1' style="float: right;" href="{% url 'post-update' post.run_id %}">Update Post</a>
+			      		<a class='btn btn-danger btn-sm mt-1 mb-1' style="float: right;" href="{% url 'post-delete' post.run_id %}">Delete Post</a>
+			      	</div>
+		      {% endif %}
 	        </div>
 	        <h2 class="article-title"><u>{{ post.title }}</u></h2>
 	        <p class="article-content">{{ post.content }}</p>

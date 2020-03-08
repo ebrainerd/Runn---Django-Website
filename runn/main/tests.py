@@ -3,7 +3,6 @@ from .models import *
 from django.contrib.auth.models import User
 import unittest
 from unittest import skip
-from django.utils import timezone
 
 
 @skip
@@ -21,15 +20,14 @@ class LemarsUnitTest1(unittest.TestCase):
         updated_content = "Actually it was at Morro Bay."
 
         my_user = User.objects.create_user(username="lepopal", first_name="Lemar",
-            last_name="Popal",email="lepopal@calpoly.edu")
+                                           last_name="Popal", email="lepopal@calpoly.edu")
         my_user.save()
         my_post = Post.objects.get_or_create(title=title, content=content, distance=distance,
-                         time=time, date_posted=date_posted, author=my_user)
-
+                                             time=time, date_posted=date_posted, author=my_user)
 
         # Act
         self.post.content = "Actually it was at Morro Bay."
-        #self.post.save()
+        # self.post.save()
 
         # Assert
         self.assertEqual(self.post.content, updated_content)
@@ -41,9 +39,8 @@ class LemarsUnitTest2(TestCase):
     def setUp(self):
         # Arrange and Act
         my_user = User.objects.create_user(username='johnlennon123', first_name='John',
-            last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+                                           last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
         my_user.save()
-
 
     def testUserContents(self):
         # Assert
@@ -54,13 +51,13 @@ class LemarsUnitTest2(TestCase):
         self.assertEqual(my_user.email, "lennon@thebeatles.com")
         # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed
 
-        
+
 class ElliotsUnitTest1(TestCase):
 
     def setUp(self):
         # Arrange and Act
         my_user = User.objects.create_user(username='johnlennon123', first_name='John',
-            last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+                                           last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
         my_user.save()
 
         my_user_profile = Profile.objects.get(user__username=my_user)
@@ -84,4 +81,3 @@ class ElliotsUnitTest1(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

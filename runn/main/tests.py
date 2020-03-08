@@ -59,7 +59,6 @@ class RunPostTestCase(TestCase):
         self.assertEqual(my_post.distance, 6.9)
         self.assertEqual(my_post.time, 30)
         self.assertEqual(my_post.author, User.objects.get(username='Elliot'))
->>>>>>> Stashed changes
 
 
 class RunPostTestCase(TestCase):

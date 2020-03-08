@@ -7,7 +7,7 @@
 #Info {
     color: black;
     text-align: left;
-    font-family: Roboto;
+    font-family: "Helvetica Neue";
 }
 </style>
 
@@ -18,7 +18,9 @@
         <div class="media-body">
             <div class="row">
                 <div class="col">
-                    <h4 class="account-heading" font-family="Roboto">{{ user.profile }}</h4>
+                    <h4 class="account-heading" font-family="Roboto">{{ user.username }}</h4>
+                    <h5 id="Info">Name - {{ user.first_name }} {{ user.last_name }}</h5>
+                    <h5 id="Info">Email - {{ user.email }}</h5>
                     <h5 id="Info">Total Distance - {{ user.profile.total_mileage }} miles</h5>
                     <h5 id="Info">Location - {{ user.profile.location }}</h5>
                     <h5 id="Info">About Me - {{ user.profile.bio }}</h5>

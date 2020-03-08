@@ -6,7 +6,7 @@ from unittest import skip
 
 
 @skip
-class LemarsUnitTest(unittest.TestCase):
+class LemarsUnitTest1(unittest.TestCase):
 
     def test_update_post(self):
         # Arrange
@@ -33,8 +33,28 @@ class LemarsUnitTest(unittest.TestCase):
         # Assert
         self.assertEqual(self.post.content, updated_content)
 
+
+@skip
+class LemarsUnitTest2(TestCase):
+
+    def setUp(self):
+        # Arrange and Act
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
+            last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+        my_user.save()
+
+
+    def testUserContents(self):
+        # Assert
+        my_user = User.objects.get(username="johnlennon123")
+        self.assertEqual(my_user.username, "johnlennon123")
+        self.assertEqual(my_user.first_name, "John")
+        self.assertEqual(my_user.last_name, "Lennon")
+        self.assertEqual(my_user.email, "lennon@thebeatles.com")
+        # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed
+
         
-class RunPostTestCase(TestCase):
+class ElliotsUnitTest1(TestCase):
 
     def setUp(self):
         # Arrange and Act
@@ -61,24 +81,6 @@ class RunPostTestCase(TestCase):
         self.assertEqual(my_post.author, Profile.objects.get(user=User.objects.get(username='johnlennon123')))
 
 
-class RunPostTestCase(TestCase):
-
-    def setUp(self):
-        # Arrange and Act
-        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
-            last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
-        my_user.save()
-
-
-    def testUserContents(self):
-        # Assert
-        my_user = User.objects.get(username="johnlennon123")
-        self.assertEqual(my_user.username, "johnlennon123")
-        self.assertEqual(my_user.first_name, "John")
-        self.assertEqual(my_user.last_name, "Lennon")
-        self.assertEqual(my_user.email, "lennon@thebeatles.com")
-        # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed
-        
-
 if __name__ == '__main__':
     unittest.main()
+

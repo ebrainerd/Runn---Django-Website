@@ -1,6 +1,5 @@
 from django.utils import timezone
 from datetime import timedelta
-import pytz
 from django.contrib.auth.models import User
 from .models import Post
 
@@ -13,12 +12,12 @@ def user_statistics(user_, days_to_subtract=None):
 	miles = 0
 	time = 0
 	longest_run = 0
-	fastest_pace = qs[0].pace
-	
+	fastest_pace = 999999 # some large integer
+
 	for post in qs:
 		miles += post.distance
-		time += post.time
-		pace = round(post.time / post.distance, 2) if post.distance != 0 else 0
+		time += post.time_minutes
+		pace = round(post.time_minutes / post.distance, 2) if post.distance != 0 else 0
 
 		if pace < fastest_pace:
 			fastest_pace = pace

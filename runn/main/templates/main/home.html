@@ -17,13 +17,17 @@
         <p class="article-content">{{ post.content }}</p>
         <div class="row">
           <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
-          <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
+          <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time_minutes }} minutes</div>
           <div class="clearfix visible-xs-block"></div>
           <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
           <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ post.location }}</div>
         </div>
         <div>
-            <a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+            {% if user.is_authenticated %}
+                    <a href="{% url 'post-detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>
+            {% else %}
+                <a>Comments: {{ post.comments.count }}</a>
+            {% endif %}
         </div>
 
       </div>

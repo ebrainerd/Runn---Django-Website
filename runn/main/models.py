@@ -74,7 +74,7 @@ class Post(models.Model):
     def pace(self):
         if self.distance == 0.0:
             return 0.0
-        return round(self.time / self.distance, 2)
+        return round(float(self.time.minute) / self.distance, 2)
 
     def __str__(self):
         return self.title

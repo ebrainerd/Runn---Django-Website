@@ -33,38 +33,38 @@ import unittest
 #         self.assertEqual(self.post.content, updated_content)
 
 
-# class RunPostTestCase(TestCase):
+class RunPostTestCase(TestCase):
 
-#     def setUp(self):
-#         # Arrange and Act
-#         my_user = User.objects.create_user(username='johnlennon123', first_name='John', 
-#             last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
-#         my_user.save()
+    def setUp(self):
+        # Arrange and Act
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
+            last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+        my_user.save()
 
-#         my_user_profile = Profile.objects.get(user__username=my_user)
+        my_user_profile = Profile.objects.get(user__username=my_user)
 
-#         Post.objects.create(
-#             title="My best run!",
-#             content="I ran fast",
-#             distance=6.9,
-#             time=30,
-#             author=my_user.username)
+        Post.objects.create(
+            title="My best run!",
+            content="I ran fast",
+            distance=6.9,
+            time=30,
+            author=my_user_profile)
 
-#     def testPostContents(self):
-#         # Assert
-#         my_post = Post.objects.get(title="My best run!")
-#         self.assertEqual(my_post.title, "My best run!")
-#         self.assertEqual(my_post.content, "I ran fast")
-#         self.assertEqual(my_post.distance, 6.9)
-#         self.assertEqual(my_post.time, 30)
-#         self.assertEqual(my_post.author, User.objects.get(username='Elliot'))
+    def testPostContents(self):
+        # Assert
+        my_post = Post.objects.get(title="My best run!")
+        self.assertEqual(my_post.title, "My best run!")
+        self.assertEqual(my_post.content, "I ran fast")
+        self.assertEqual(my_post.distance, 6.9)
+        self.assertEqual(my_post.time, 30)
+        self.assertEqual(my_post.author, Profile.objects.get(user=User.objects.get(username='johnlennon123')))
 
 
 class TestUserCreation(TestCase):
 
     def setUp(self):
         # Arrange and Act
-        my_user = User.objects.create_user(username='johnlennon123', first_name='John', 
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
             last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
         my_user.save()
 
@@ -76,7 +76,7 @@ class TestUserCreation(TestCase):
         self.assertEqual(my_user.first_name, "John")
         self.assertEqual(my_user.last_name, "Lennon")
         self.assertEqual(my_user.email, "lennon@thebeatles.com")
-        # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed 
+        # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed
 
 
 if __name__ == '__main__':

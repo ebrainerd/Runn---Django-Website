@@ -41,9 +41,7 @@ import unittest
 #             last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
 #         my_user.save()
 
-#         print("HERE", my_user)
 #         my_user_profile = Profile.objects.get(user__username=my_user)
-#         print("PROFILE", my_user_profile)
 
 #         Post.objects.create(
 #             title="My best run!",

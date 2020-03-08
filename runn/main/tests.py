@@ -1,8 +1,9 @@
 from django.test import TestCase
-from main.models import *
+from .models import *
 from django.contrib.auth.models import User
 import unittest
 from unittest import skip
+from django.utils import timezone
 
 
 @skip
@@ -68,7 +69,7 @@ class ElliotsUnitTest1(TestCase):
             title="My best run!",
             content="I ran fast",
             distance=6.9,
-            time=30,
+            time="00:30:00",
             author=my_user_profile)
 
     def testPostContents(self):
@@ -77,7 +78,7 @@ class ElliotsUnitTest1(TestCase):
         self.assertEqual(my_post.title, "My best run!")
         self.assertEqual(my_post.content, "I ran fast")
         self.assertEqual(my_post.distance, 6.9)
-        self.assertEqual(my_post.time, 30)
+        self.assertEqual(my_post.time_minutes, 30)
         self.assertEqual(my_post.author, Profile.objects.get(user=User.objects.get(username='johnlennon123')))
 
 

@@ -33,7 +33,7 @@ class LemarsUnitTest(unittest.TestCase):
         # Assert
         self.assertEqual(self.post.content, updated_content)
 
-@skip
+        
 class RunPostTestCase(TestCase):
 
     def setUp(self):
@@ -49,7 +49,7 @@ class RunPostTestCase(TestCase):
             content="I ran fast",
             distance=6.9,
             time=30,
-            author=my_user.username)
+            author=my_user_profile)
 
     def testPostContents(self):
         # Assert
@@ -58,31 +58,27 @@ class RunPostTestCase(TestCase):
         self.assertEqual(my_post.content, "I ran fast")
         self.assertEqual(my_post.distance, 6.9)
         self.assertEqual(my_post.time, 30)
-        self.assertEqual(my_post.author, User.objects.get(username='Elliot'))
+        self.assertEqual(my_post.author, Profile.objects.get(user=User.objects.get(username='johnlennon123')))
 
 
 class RunPostTestCase(TestCase):
 
     def setUp(self):
         # Arrange and Act
-        Run.objects.create(
-            title="My best run!",
-            content="I ran fast",
-            distance=6.9,
-            time=30,
-            author=User.objects.create_user(username='Elliot',
-                                            password='testing')
-        )
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
+            last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+        my_user.save()
 
-    def testPostContents(self):
+
+    def testUserContents(self):
         # Assert
-        my_post = Run.objects.get(title="My best run!")
-        self.assertEqual(my_post.title, "My best run!")
-        self.assertEqual(my_post.content, "I ran fast")
-        self.assertEqual(my_post.distance, 6.9)
-        self.assertEqual(my_post.time, 30)
-        self.assertEqual(my_post.author, User.objects.get(username='Elliot'))
-
+        my_user = User.objects.get(username="johnlennon123")
+        self.assertEqual(my_user.username, "johnlennon123")
+        self.assertEqual(my_user.first_name, "John")
+        self.assertEqual(my_user.last_name, "Lennon")
+        self.assertEqual(my_user.email, "lennon@thebeatles.com")
+        # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed
+        
 
 if __name__ == '__main__':
     unittest.main()

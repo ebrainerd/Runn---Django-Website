@@ -16,6 +16,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from .models import Post, Profile
 from django.db.models import Q
+from main.utils import user_statistics
 
 
 class ProfileDetailView(DetailView):
@@ -34,9 +35,31 @@ class ProfileDetailView(DetailView):
         if self.request.user.is_authenticated and user_to_view.profile in self.request.user.is_following.all():
             is_following = True
 
-        return render(request, 'main/profile.html', {'posts': posts,
-                                                     'user': user_to_view,
-                                                     'is_following': is_following})
+        miles_last_7_days, time_last_7_days, avg_pace_last_7_days, longest_run_last_7_days, fastest_pace_last_7_days = \
+            user_statistics(self.request.user, days_to_subtract=7)
+
+        context = {}
+        context['posts'] = posts
+        context['user'] = user_to_view
+        context['is_following'] = is_following
+        context['miles_last_7_days'] = miles_last_7_days
+        context['time_last_7_days'] = time_last_7_days
+        context['avg_pace_last_7_days'] = avg_pace_last_7_days
+        context['longest_run_last_7_days'] = longest_run_last_7_days
+        context['fastest_pace_last_7_days'] = fastest_pace_last_7_days
+
+        # 'ou_' = other user's statistics (evaluated when viewing other user's profiles)
+        if user_to_view.id != request.user.id:
+            miles_last_7_days, time_last_7_days, avg_pace_last_7_days, longest_run_last_7_days, fastest_pace_last_7_days = \
+                user_statistics(user_to_view, days_to_subtract=7)
+
+            context['ou_miles_last_7_days'] = miles_last_7_days
+            context['ou_time_last_7_days'] = time_last_7_days
+            context['ou_avg_pace_last_7_days'] = avg_pace_last_7_days
+            context['ou_longest_run_last_7_days'] = longest_run_last_7_days
+            context['ou_fastest_pace_last_7_days'] = fastest_pace_last_7_days
+
+        return render(request, 'main/profile.html', context)
 
 
 class PostListViewHome(ListView):
@@ -44,7 +67,9 @@ class PostListViewHome(ListView):
         user = self.request.user
         if not user.is_authenticated:
             qs = Post.objects.all().order_by('-date_posted')
-            messages.info(self.request, "You are not logged in. Displaying all posts.")
+            message = "You are not logged in. Displaying all posts by default. "\
+                        + "Please sign in or register to search, view user profiles, and comment."
+            messages.info(self.request, message)
             return render(request, 'main/home.html', {'posts': qs})
 
         Profile.objects.update_mileages(user)

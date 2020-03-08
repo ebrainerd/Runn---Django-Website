@@ -1,42 +1,50 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-<article class="media content-section">
-    <div class="media-body">
-        <div class="article-metadata">
-            {% if user.is_authenticated %}
-            <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
-            {% else %}
-            <h5>{{ post.author }}</h5>
-            {% endif %}
-            <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-        </div>
-        <h2 class="article-title"><u>{{ post.title }}</u></h2>
-        <p class="article-content">{{ post.content }}</p>
-        <div class="row">
-            <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
-            <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time }} minutes</div>
-            <div class="clearfix visible-xs-block"></div>
-            <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
-        </div>
-    </div>
-</article>
-<hr>
-<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
-{% for comment in post.comments.all %}
-<div class="col">
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="comment">
-                <div class="date">{{ comment.date_posted|date:"F d, Y" }}</div>
-                <strong><a href="{% url 'user-profile' pk=comment.author.pk %}">{{ comment.author }}</a></strong>
-                <p>{{ comment.content|linebreaks }}</p>
-            </div>
-        </div>
-    </article>
-</div>
-{% empty %}
-<p>No comments here yet :(</p>
-{% endfor %}
-</hr>
+	<article class="media content-section">
+	    <div class="media-body">
+	        <div class="article-metadata">
+	            {% if user.is_authenticated %}
+	            <a class="mr-2" href="{% url 'user-profile' pk=post.author.pk %}">{{ post.author }}</a>
+	            {% else %}
+	            <h5>{{ post.author }}</h5>
+	            {% endif %}
+	            <small class="text-muted">{{ post.date_posted }}</small>
+	            {% if post.author == user.profile %}
+			      	<div>
+			      		<a class='btn btn-info btn-sm mt-1 mb-1' style="float: right;" href="{% url 'post-update' post.run_id %}">Update Post</a>
+			      		<a class='btn btn-danger btn-sm mt-1 mb-1' style="float: right;" href="{% url 'post-delete' post.run_id %}">Delete Post</a>
+			      	</div>
+		      {% endif %}
+	        </div>
+	        <h2 class="article-title"><u>{{ post.title }}</u></h2>
+	        <p class="article-content">{{ post.content }}</p>
+	        <div class="row">
+	            <div class="col-xs-6 col-sm-4"><b>Distance: </b>{{ post.distance }} miles</div>
+	            <div class="col-xs-6 col-sm-4"><b>Time: </b>{{ post.time_minutes }} minutes</div>
+	            <div class="clearfix visible-xs-block"></div>
+	            <div class="col-xs-6 col-sm-4"><b>Pace: </b>{{ post.pace }} mins/mile</div>
+	        </div>
+	    </div>
+	</article>
+	<hr>
+	{% if user.is_authenticated %}
+		<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+	{% endif %}
+	{% for comment in post.comments.all %}
+		<div class="col">
+		    <article class="media content-section">
+		        <div class="media-body">
+		            <div class="comment">
+		                <div class="date">{{ comment.date_posted }}</div>
+		                <strong><a href="{% url 'user-profile' pk=comment.author.pk %}">{{ comment.author }}</a></strong>
+		                <p>{{ comment.content|linebreaks }}</p>
+		            </div>
+		        </div>
+		    </article>
+		</div>
+		{% empty %}
+		<p>No comments here yet :(</p>
+	{% endfor %}
+	</hr>
 {% endblock content %}

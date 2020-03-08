@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class ProfileManager(models.Manager):
@@ -33,8 +34,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
-    followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following',
-                                       blank=True)  # user.is_following.all()
+    followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following', blank=True)  # user.is_following.all()
     total_mileage = models.FloatField(default=0.0)
 
     objects = ProfileManager()
@@ -59,22 +59,29 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-
 class Post(models.Model):
     run_id = models.AutoField(primary_key=True)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.TextField(max_length=100, blank=False, default="")
-    distance = models.FloatField(default=0.0, blank=False)
-    time = models.IntegerField(default=0, blank=False)
+    distance = models.FloatField(default=0.0, blank=False, 
+    	validators=[MinValueValidator(0.1)], help_text='Enter distance in miles.')
+    time = models.TimeField(blank=False, help_text='Enter time in the form "HH:MM:SS".')
     date_posted = models.DateTimeField(default=timezone.now)
-    location = models.TextField(max_length=100, blank=False, default="")
-    content = models.TextField(max_length=1000, blank=True, default="")
+    location = models.TextField(max_length=100, blank=False, default="", 
+    	help_text='Where did you run? Max 100 characters.')
+    content = models.TextField(max_length=1000, blank=True, default="", 
+    	help_text='Write something about your run here! Max 1000 characters.')
 
     @property
     def pace(self):
         if self.distance == 0.0:
             return 0.0
-        return round(float(self.time.minute) / self.distance, 2)
+        return round(self.time_minutes / self.distance, 2)
+
+    @property
+    def time_minutes(self):
+    	seconds = (self.time.hour * 3600) + (self.time.minute * 60) + self.time.second
+    	return seconds // 60
 
     def __str__(self):
         return self.title

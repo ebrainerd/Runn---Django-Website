@@ -1,38 +1,39 @@
 from django.test import TestCase
 from main.models import *
 from django.contrib.auth.models import User
-from .models import Post, Profile
 import unittest
+from unittest import skip
 
 
-# class LemarsUnitTest(unittest.TestCase):
+@skip
+class LemarsUnitTest(unittest.TestCase):
 
-#     def test_update_post(self):
-#         # Arrange
-#         title = "My first run!"
-#         content = "Today I ran at Pismo Beach."
-#         distance = 5.4
-#         time = 36
-#         pace = round(distance / time, 2)
-#         date_posted = "2020-02-16"
+    def test_update_post(self):
+        # Arrange
+        title = "My first run!"
+        content = "Today I ran at Pismo Beach."
+        distance = 5.4
+        time = 36
+        pace = round(distance / time, 2)
+        date_posted = "2020-02-16"
 
-#         updated_content = "Actually it was at Morro Bay."
+        updated_content = "Actually it was at Morro Bay."
 
-#         my_user = User.objects.create_user(username="lepopal", first_name="Lemar",
-#             last_name="Popal",email="lepopal@calpoly.edu")
-#         my_user.save()
-#         my_post = Post.objects.get_or_create(title=title, content=content, distance=distance,
-#                          time=time, date_posted=date_posted, author=my_user)
-
-
-#         # Act
-#         self.post.content = "Actually it was at Morro Bay."
-#         #self.post.save()
-
-#         # Assert
-#         self.assertEqual(self.post.content, updated_content)
+        my_user = User.objects.create_user(username="lepopal", first_name="Lemar",
+            last_name="Popal",email="lepopal@calpoly.edu")
+        my_user.save()
+        my_post = Post.objects.get_or_create(title=title, content=content, distance=distance,
+                         time=time, date_posted=date_posted, author=my_user)
 
 
+        # Act
+        self.post.content = "Actually it was at Morro Bay."
+        #self.post.save()
+
+        # Assert
+        self.assertEqual(self.post.content, updated_content)
+
+        
 class RunPostTestCase(TestCase):
 
     def setUp(self):
@@ -60,7 +61,7 @@ class RunPostTestCase(TestCase):
         self.assertEqual(my_post.author, Profile.objects.get(user=User.objects.get(username='johnlennon123')))
 
 
-class TestUserCreation(TestCase):
+class RunPostTestCase(TestCase):
 
     def setUp(self):
         # Arrange and Act
@@ -77,7 +78,7 @@ class TestUserCreation(TestCase):
         self.assertEqual(my_user.last_name, "Lennon")
         self.assertEqual(my_user.email, "lennon@thebeatles.com")
         # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed
-
+        
 
 if __name__ == '__main__':
     unittest.main()

@@ -71,3 +71,44 @@
 {% endfor %}
 
 {% endblock content %}
+
+
+{% block sidebar %}
+<div class="col-md-4">
+    <div class="content-section">
+        <h3>Running Statistics</h3>
+        <p class='text-muted'>Here's how you did{% if user.id != request.user.id %} compared to {{user.username}}{% endif %}.
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-light">
+                <p>Total Miles: {{ miles_last_7_days }}</p>
+                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }}</p>{% endif %}
+            </li>
+        </ul>
+        <br>
+        <p class='text-muted'>In the last 7 days:</p>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-light">
+                <p>Total Miles: {{ miles_last_7_days }}</p>
+                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }}</p>{% endif %}
+            </li>
+            <li class="list-group-item list-group-item-light">
+                <p>Time Running: {{ time_last_7_days }}</p>
+                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }}</p>{% endif %}
+            </li>
+            <li class="list-group-item list-group-item-light">
+                <p>Fastest Pace: {{ fastest_pace_last_7_days }}</p>
+                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }}</p>{% endif %}
+            </li>
+            <li class="list-group-item list-group-item-light">
+                <p>Average Pace: {{ avg_pace_last_7_days }}</p>
+                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }}</p>{% endif %}
+            </li>
+            <li class="list-group-item list-group-item-light">
+                <p>Longest Run: {{ longest_run_last_7_days }}</p>
+                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }}</p>{% endif %}
+            </li>  
+        </ul>
+        </p>
+    </div>
+</div>
+{% endblock sidebar %}

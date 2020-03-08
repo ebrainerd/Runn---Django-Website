@@ -36,9 +36,7 @@ class ProfileDetailView(DetailView):
             is_following = True
 
         miles_last_7_days, time_last_7_days, avg_pace_last_7_days, longest_run_last_7_days, fastest_pace_last_7_days = \
-            statistics_last_7_days(user_to_view)
-
-        print(user_to_view)
+            statistics_last_7_days(self.request.user)
 
         context = {}
         context['posts'] = posts
@@ -49,6 +47,16 @@ class ProfileDetailView(DetailView):
         context['avg_pace_last_7_days'] = avg_pace_last_7_days
         context['longest_run_last_7_days'] = longest_run_last_7_days
         context['fastest_pace_last_7_days'] = fastest_pace_last_7_days
+
+        # 'ou_' = other user's statistics (evaluated when viewing other user's profiles)
+        if user_to_view.id != request.user.id:
+            miles_last_7_days, time_last_7_days, avg_pace_last_7_days, longest_run_last_7_days, fastest_pace_last_7_days = \
+                statistics_last_7_days(user_to_view)
+            context['ou_miles_last_7_days'] = miles_last_7_days
+            context['ou_time_last_7_days'] = time_last_7_days
+            context['ou_avg_pace_last_7_days'] = avg_pace_last_7_days
+            context['ou_longest_run_last_7_days'] = longest_run_last_7_days
+            context['ou_fastest_pace_last_7_days'] = fastest_pace_last_7_days
 
         return render(request, 'main/profile.html', context)
 

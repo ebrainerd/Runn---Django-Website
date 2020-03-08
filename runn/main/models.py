@@ -34,8 +34,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=False, default="")
     location = models.TextField(max_length=100, blank=False, default="")
-    followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following',
-                                       blank=True)  # user.is_following.all()
+    followers = models.ManyToManyField(User, symmetrical=False, related_name='is_following', blank=True)  # user.is_following.all()
     total_mileage = models.FloatField(default=0.0)
 
     objects = ProfileManager()
@@ -64,13 +63,14 @@ class Post(models.Model):
     run_id = models.AutoField(primary_key=True)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.TextField(max_length=100, blank=False, default="")
-    error_messages = {""}
     distance = models.FloatField(default=0.0, blank=False, 
-    	validators=[MinValueValidator(0.1)])
+    	validators=[MinValueValidator(0.1)], help_text='Enter distance in miles.')
     time = models.TimeField(blank=False, help_text='Enter time in the form "HH:MM:SS".')
     date_posted = models.DateTimeField(default=timezone.now)
-    location = models.TextField(max_length=100, blank=False, default="")
-    content = models.TextField(max_length=1000, blank=True, default="")
+    location = models.TextField(max_length=100, blank=False, default="", 
+    	help_text='Where did you run? Max 100 characters.')
+    content = models.TextField(max_length=1000, blank=True, default="", 
+    	help_text='Write something about your run here! Max 1000 characters.')
 
     @property
     def pace(self):

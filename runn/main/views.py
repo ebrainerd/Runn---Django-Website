@@ -16,6 +16,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from .models import Post, Profile
 from django.db.models import Q
+from main.utils import statistics_last_7_days
 
 
 class ProfileDetailView(DetailView):
@@ -34,9 +35,22 @@ class ProfileDetailView(DetailView):
         if self.request.user.is_authenticated and user_to_view.profile in self.request.user.is_following.all():
             is_following = True
 
-        return render(request, 'main/profile.html', {'posts': posts,
-                                                     'user': user_to_view,
-                                                     'is_following': is_following})
+        miles_last_7_days, time_last_7_days, avg_pace_last_7_days, longest_run_last_7_days, fastest_pace_last_7_days = \
+            statistics_last_7_days(user_to_view)
+
+        print(user_to_view)
+
+        context = {}
+        context['posts'] = posts
+        context['user'] = user_to_view
+        context['is_following'] = is_following
+        context['miles_last_7_days'] = miles_last_7_days
+        context['time_last_7_days'] = time_last_7_days
+        context['avg_pace_last_7_days'] = avg_pace_last_7_days
+        context['longest_run_last_7_days'] = longest_run_last_7_days
+        context['fastest_pace_last_7_days'] = fastest_pace_last_7_days
+
+        return render(request, 'main/profile.html', context)
 
 
 class PostListViewHome(ListView):

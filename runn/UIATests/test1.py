@@ -3,8 +3,9 @@ from selenium.webdriver.common.keys import Keys
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
+from unittest import skip
 
-
+@skip
 class TestHomePage(StaticLiveServerTestCase):
 
 	def setup(self):

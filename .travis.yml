@@ -10,4 +10,4 @@ install:
 script:
   - python3 runn/manage.py makemigrations
   - python3 runn/manage.py migrate
-  - ./runn/manage.py test --with-coverage
+  - ./runn/manage.py test main --with-coverage

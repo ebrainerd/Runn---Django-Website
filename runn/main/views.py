@@ -217,9 +217,7 @@ def find_user_by_userName_and_first_and_last_name(query_name):
 def search_users_location(request):
     if request.method == 'GET':
         query = request.GET.get('q')
-        object_list = Profile.objects.filter(
-            Q(location__icontains = query)
-        )
+        object_list = find_user_by_location(query)
         context_dict = {'object_list': object_list, 'query': query}
     return render(request, 'main/search_users_location.html', context_dict)
 

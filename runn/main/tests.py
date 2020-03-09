@@ -1,8 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from .models import *
 from django.contrib.auth.models import User
 import unittest
 from unittest import skip
+from main.views import *
 
 
 @skip
@@ -77,6 +78,40 @@ class ElliotsUnitTest1(TestCase):
         self.assertEqual(my_post.distance, 6.9)
         self.assertEqual(my_post.time_minutes, 30)
         self.assertEqual(my_post.author, Profile.objects.get(user=User.objects.get(username='johnlennon123')))
+
+
+class SearchUsers(TestCase):
+
+    def setUp(self):
+        # Arrange and Act
+
+        user1 = User.objects.create_user(username='johnlennon123', first_name='John',
+                                           last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+        user2 = User.objects.create_user(username='Runman', first_name='Joe',
+                                           last_name='Boe', email='joerunns@runman.com', password='plzletmein')
+        user1.save()
+        user2.save()
+
+    def testSearchByFirstName(self):
+        searchResults = find_user_by_userName_and_first_and_last_name('John')
+        self.assertEqual(len(searchResults), 1)
+        self.assertTrue(Profile.objects.get(user=User.objects.get(first_name= 'John')) in searchResults)
+
+    def testSearchByLastName(self):
+        searchResults = find_user_by_userName_and_first_and_last_name('Boe')
+        self.assertEqual(len(searchResults), 1)
+        self.assertTrue(Profile.objects.get(user=User.objects.get(last_name= 'Boe')) in searchResults)
+
+    def testSearchUserName(self):
+        searchResults = find_user_by_userName_and_first_and_last_name('Runman')
+        self.assertEqual(len(searchResults), 1)
+        self.assertTrue(Profile.objects.get(user=User.objects.get(username= 'Runman')) in searchResults)
+
+    def testSearchLocation(self):
+        searchResults = find_user_by_location('')
+        expectedResults = Profile.objects.filter(location= '')
+        for expectedResult in expectedResults:
+            self.assertTrue(expectedResult in searchResults)
 
 
 if __name__ == '__main__':

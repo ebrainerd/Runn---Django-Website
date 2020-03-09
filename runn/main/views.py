@@ -201,12 +201,12 @@ def search(request):
 def search_users_name(request):
     if request.method == 'GET':
         query = request.GET.get('q')
-        object_list = find_user_by_first_and_last_name(query)
+        object_list = find_user_by_userName_and_first_and_last_name(query)
     context_dict = {'object_list': object_list, 'query': query}
     return render(request, 'main/search_users_name.html', context_dict)
 
 
-def find_user_by_first_and_last_name(query_name):
+def find_user_by_userName_and_first_and_last_name(query_name):
     qs = Profile.objects.all()
     for term in query_name.split():
         qs = qs.filter(Q(user__first_name__icontains=term) | Q(user__last_name__icontains=term) | Q(
@@ -222,3 +222,9 @@ def search_users_location(request):
         )
         context_dict = {'object_list': object_list, 'query': query}
     return render(request, 'main/search_users_location.html', context_dict)
+
+def find_user_by_location(query_name):
+    qs = Profile.objects.all()
+    for term in query_name.split():
+        qs = qs.filter(Q(location__icontains = term))
+    return qs

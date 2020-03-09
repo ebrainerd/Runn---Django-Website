@@ -1,28 +1,19 @@
 {% extends "main/base.html" %}
-
-
-<!-- Returns all posts for now until data can e queried-->cxdzs
-<form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
-    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
-           name="search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-</form>
 {% block content %}
-	<h1><u>Runn Search!</u></h1>
-	<form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
-	    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
-	           name="search">
-	    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-	</form>
-	{% for Profile in object_list %}
-	<li>
-	    {{ Profile.username }} {{ Profile.first_name }} {{Profile.last_name}}
-	</li>
-	{% endfor %}
-
-	{%if not object_list%}
-		<u2>No matches!!!</u2>
-	{% endif%}
-	<u1>Results for [input]</u1>
-	
+<h1><u>Runn Search!</u></h1>
+<h2>Search users by name or by location<h2/>
+<br>
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-name' %}" method="get">
+    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search By Name"
+           name="hello">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search By Name</button>
+</form>
+<h3>Search by firstname, lastname, or username<h3/>
+<br>
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-location' %}" method="get">
+    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search By Location"
+           name="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search By Location</button>
+</form>
+<h3>Search by location<h3/>
 {% endblock content %}

@@ -1,0 +1,32 @@
+{% extends "main/base.html" %}
+{% block content %}
+<h1><u>Runn Search!</u></h1>
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search-users-name' %}" method="get">
+    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search"
+           name="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by name</button>
+</form>
+<div>Searching users by name </div>
+<div>You searched for: <b><u>{{ query }}</u></b>  </div>
+<br>
+
+{% for Profile in object_list %}
+<li>
+    <a class="mr-2" href="{% url 'user-profile' pk=Profile.pk %}"> Name: {{Profile.user.first_name}}, {{Profile.user.last_name}} Username: {{Profile.user.username }},</a>
+    <br>{{"Location: "}} {{Profile.location }}
+</li>
+<br>
+{% endfor %}
+{%if not object_list%}
+<div>No matches!!! Try searching by username or first or last name with correct spelling</div>
+<br>
+{% endif%}
+<div>If you want to search by location return to the main search page</div>
+<br>
+<form class="form-inline my-2 my-lg-0" action="{% url 'main-search' %}" method="get">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Click here to return to main search page</button>
+</form>
+<br>
+<br>
+
+{% endblock content %}

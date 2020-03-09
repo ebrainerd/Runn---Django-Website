@@ -5,7 +5,6 @@ import unittest
 from unittest import skip
 
 
-@skip
 class LemarsUnitTest1(unittest.TestCase):
 
     def test_update_post(self):
@@ -13,8 +12,7 @@ class LemarsUnitTest1(unittest.TestCase):
         title = "My first run!"
         content = "Today I ran at Pismo Beach."
         distance = 5.4
-        time = 36
-        pace = round(distance / time, 2)
+        time = "00:36:00"
         date_posted = "2020-02-16"
 
         updated_content = "Actually it was at Morro Bay."
@@ -22,18 +20,24 @@ class LemarsUnitTest1(unittest.TestCase):
         my_user = User.objects.create_user(username="lepopal", first_name="Lemar",
                                            last_name="Popal", email="lepopal@calpoly.edu")
         my_user.save()
-        my_post = Post.objects.get_or_create(title=title, content=content, distance=distance,
-                                             time=time, date_posted=date_posted, author=my_user)
+
+        my_post = Post.objects.create(
+            title=title,
+            content=content,
+            distance=distance,
+            time=time,
+            author=my_user.profile)
+
+        my_post.save()
 
         # Act
-        self.post.content = "Actually it was at Morro Bay."
-        # self.post.save()
+        my_post.content = "Actually it was at Morro Bay."
+        my_post.save()
 
         # Assert
-        self.assertEqual(self.post.content, updated_content)
+        self.assertEqual(my_post.content, updated_content)
 
 
-@skip
 class LemarsUnitTest2(TestCase):
 
     def setUp(self):
@@ -49,7 +53,6 @@ class LemarsUnitTest2(TestCase):
         self.assertEqual(my_user.first_name, "John")
         self.assertEqual(my_user.last_name, "Lennon")
         self.assertEqual(my_user.email, "lennon@thebeatles.com")
-        # self.assertEqual(my_user.password, "johnpassword") # won't work b/c password is hashed
 
 
 class ElliotsUnitTest1(TestCase):

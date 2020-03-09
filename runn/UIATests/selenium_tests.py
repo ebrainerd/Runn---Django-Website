@@ -21,7 +21,8 @@ class TestSiteTitle(StaticLiveServerTestCase):
 		self.driver = webdriver.Chrome('UIATests/chromedriver')
 
 	def tearDown(self):
-		self.browser.close()
+		sleep(.1)
+		self.driver.close()
 
 	def test_title_is_Runn(self):
 		self.driver.get(self.live_server_url)
@@ -36,7 +37,8 @@ class TestUserRegistration(StaticLiveServerTestCase):
 		self.driver = webdriver.Chrome('UIATests/chromedriver')
 
 	def tearDown(self):
-		self.browser.close()
+		sleep(.1)
+		self.driver.close()
 
 	def test_registration_success(self):
 		# self.driver.get(self.live_server_url)
@@ -44,7 +46,7 @@ class TestUserRegistration(StaticLiveServerTestCase):
 
 		driver = self.driver
 		driver.maximize_window()
-		time.sleep(.3)
+		sleep(.3)
 		register_button = driver.find_element_by_id("register_btn")
 		register_button.click()
 
@@ -83,7 +85,8 @@ class TestCreateNewPost(StaticLiveServerTestCase):
 		self.driver = webdriver.Chrome('UIATests/chromedriver')
 
 	def tearDown(self):
-		self.browser.close()
+		sleep(.1)
+		self.driver.close()
 
 	def test_create_new_post(self):
 		self.driver.get("http://localhost:8000/")
@@ -135,7 +138,8 @@ class TestCreateNewPost(StaticLiveServerTestCase):
 		title = 'test post title'
 		content = 'test post content'
 		distance = '4.0'
-		time = '20'
+		time = "00:20:00"
+		time_verif = '20'
 
 		post_fields = {
 			'//*[@id="id_title"]': title,
@@ -158,5 +162,5 @@ class TestCreateNewPost(StaticLiveServerTestCase):
 		self.assertTrue(title in postText)
 		self.assertTrue(content in postText)
 		self.assertTrue(distance in postText)
-		self.assertTrue(time in postText)
+		self.assertTrue(time_verif in postText)
 

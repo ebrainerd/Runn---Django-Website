@@ -86,24 +86,38 @@ class ElliotsUnitTest1(TestCase):
 class SearchUsers(TestCase):
 
     def setUp(self):
-        # Arrange and Act
 
         user1 = User.objects.create_user(username='johnlennon123', first_name='John',
                                            last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
         user2 = User.objects.create_user(username='Runman', first_name='Joe',
                                            last_name='Boe', email='joerunns@runman.com', password='plzletmein')
+        user3 = User.objects.create_user(username='misterspeed', first_name='Joe',
+                                           last_name='Speed', email='iamspeed@runman.com', password='plzletmein123')
         user1.save()
         user2.save()
+        user3.save()
+
+        user1.profile.location = 'the beach'
+        user2.profile.location = 'mountain'
+        user3.profile.location = 'secret base'
+
+        user1.save()
+        user2.save()
+        user3.save()
 
     def testSearchByFirstName(self):
-        searchResults = find_user_by_userName_and_first_and_last_name('John')
-        self.assertEqual(len(searchResults), 1)
-        self.assertTrue(Profile.objects.get(user=User.objects.get(first_name= 'John')) in searchResults)
+        expectedResults = Profile.objects.all().filter(user__first_name = 'Joe')
+
+        searchResults = find_user_by_userName_and_first_and_last_name('Joe')
+
+        self.assertEqual(len(searchResults), 2)
+        for searchResult in searchResults:
+            self.assertTrue(searchResult in expectedResults)
 
     def testSearchByLastName(self):
-        searchResults = find_user_by_userName_and_first_and_last_name('Boe')
+        searchResults = find_user_by_userName_and_first_and_last_name('Lennon')
         self.assertEqual(len(searchResults), 1)
-        self.assertTrue(Profile.objects.get(user=User.objects.get(last_name= 'Boe')) in searchResults)
+        self.assertTrue(Profile.objects.get(user=User.objects.get(last_name= 'Lennon')) in searchResults)
 
     def testSearchUserName(self):
         searchResults = find_user_by_userName_and_first_and_last_name('Runman')
@@ -111,11 +125,9 @@ class SearchUsers(TestCase):
         self.assertTrue(Profile.objects.get(user=User.objects.get(username= 'Runman')) in searchResults)
 
     def testSearchLocation(self):
-        searchResults = find_user_by_location('')
-        expectedResults = Profile.objects.filter(location= '')
-        for expectedResult in expectedResults:
-            self.assertTrue(expectedResult in searchResults)
-
+        searchResults = find_user_by_location('the beach')
+        self.assertEqual(len(searchResults), 1)
+        self.assertTrue(Profile.objects.get(location= 'the beach') in searchResults)
 
 if __name__ == '__main__':
     unittest.main()

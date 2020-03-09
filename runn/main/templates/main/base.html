@@ -51,7 +51,7 @@
                 <li {% if "/login/" == request.path %}class="nav-item active"{% endif %}>
                   <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 </li>
-                <li {% if "/register/" == request.path %}class="nav-item active"{% endif %}>
+                <li id="register_btn"{% if "/register/" == request.path %}class="nav-item active"{% endif %}>
                   <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
                 </li>
               {% endif %}

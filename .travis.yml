@@ -12,4 +12,7 @@ script:
   - python3 runn/manage.py migrate
   - ./runn/manage.py test main --with-coverage
   - python3 runn/manage.py runserver
+  - PID = $!
+  - sleep 1
   - python3 runn/manage.py test UIATests
+  - kill $PID

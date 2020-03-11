@@ -7,9 +7,13 @@ install:
   - pip install django-crispy-forms
   - pip install selenium
   - pip install coverage
+before_script:
+  - wget http://chromedriver.storage.googleapis.com/80.0.3987.16/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python3.7.1/bin/
+  - export CHROME_BIN=chromium-browser
+  - python3 runn/manage.py runserver &
 script:
   - python3 runn/manage.py makemigrations
   - python3 runn/manage.py migrate
   - ./runn/manage.py test main --with-coverage
-  - python3 runn/manage.py runserver
   - python3 runn/manage.py test UIATests

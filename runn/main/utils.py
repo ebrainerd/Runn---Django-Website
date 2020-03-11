@@ -9,6 +9,15 @@ def user_statistics(user_, days_to_subtract=None):
 	else:
 		qs = Post.objects.filter(author=user_.profile,
 							 	date_posted__gte=timezone.now() - timedelta(days=days_to_subtract))
+
+	if len(qs) == 0:
+		miles = 0
+		time = "0 Days, 0 Hours, 0 Minutes, 0 Seconds"
+		avg_pace = 0
+		longest_run = 0
+		fastest_pace = 0
+		return miles, time, avg_pace, longest_run, fastest_pace
+
 	miles = 0
 	time = 0
 	longest_run = 0
@@ -26,5 +35,12 @@ def user_statistics(user_, days_to_subtract=None):
 			longest_run = post.distance
 
 	avg_pace = round(time / miles, 2) if miles != 0 else 0
+
+	time = timedelta(minutes=time)
+	total_seconds = time.seconds
+	total_seconds, seconds = divmod(total_seconds, 60)
+	hours, minutes = divmod(total_seconds, 60)
+
+	time = "{} Days, {} Hours, {} Minutes, {} Seconds".format(time.days, hours, minutes, seconds)
 
 	return miles, time, avg_pace, longest_run, fastest_pace

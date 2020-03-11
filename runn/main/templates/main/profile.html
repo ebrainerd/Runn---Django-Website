@@ -77,7 +77,7 @@
         <ul class="list-group">
             <li class="list-group-item list-group-item-light">
                 <p>Total Miles: {{ miles_last_7_days }} miles</p>
-                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }} miles</p>{% endif %}
+                {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ user.profile.total_mileage }} miles</p>{% endif %}
             </li>
         </ul>
         <br>

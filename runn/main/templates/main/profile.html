@@ -21,7 +21,6 @@
                     <h4 class="account-heading" font-family="Roboto">{{ user.first_name }} {{ user.last_name }}</h4>
                     <h5 id="Info">@{{ user.username }}</h5>
                     <h5 id="Info">Email - {{ user.email }}</h5>
-                    <h5 id="Info">Total Distance - {{ user.profile.total_mileage }} miles</h5>
                     <h5 id="Info">Location - {{ user.profile.location }}</h5>
                     <h5 id="Info">About Me - {{ user.profile.bio }}</h5>
                 </div>
@@ -76,7 +75,7 @@
         <p class='text-muted'>Here's how you did{% if user.id != request.user.id %} compared to {{user.username}}{% endif %}.
         <ul class="list-group">
             <li class="list-group-item list-group-item-light">
-                <p>Total Miles: {{ miles_last_7_days }} miles</p>
+                <p>Total Miles: {{ user.profile.total_mileage }} miles</p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ user.profile.total_mileage }} miles</p>{% endif %}
             </li>
         </ul>

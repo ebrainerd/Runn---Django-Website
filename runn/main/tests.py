@@ -119,6 +119,10 @@ class SearchUsers(TestCase):
         self.assertEqual(len(searchResults), 1)
         self.assertTrue(Profile.objects.get(user=User.objects.get(last_name= 'Lennon')) in searchResults)
 
+    def testSearchByFirstAndLastName(self):
+        searchResults = find_user_by_userName_and_first_and_last_name('John Lennon')
+        self.assertEqual(len(searchResults), 1)
+        self.assertTrue(Profile.objects.get(user=User.objects.get(last_name= 'Lennon')) in searchResults)
     def testSearchUserName(self):
         searchResults = find_user_by_userName_and_first_and_last_name('Runman')
         self.assertEqual(len(searchResults), 1)

@@ -11,16 +11,29 @@
 <br>
 
 {% for Profile in object_list %}
-<li>
-    <a class="mr-2" href="{% url 'user-profile' pk=Profile.pk %}"> Name: {{Profile.user.first_name}}, {{Profile.user.last_name}} Username: {{Profile.user.username }}</a>
-    <br>{{"Location: "}} {{Profile.location }}
-</li>
+    <article class="media content-section">
+      <div class="media-body">
+        <div class="article-metadata">
+        <h2><a class="mr-2" href="{% url 'user-profile' pk=Profile.pk %}"> {{ Profile.user.username }}</a>
+
+        </h2>
+        </div>
+          <div class="row">
+          <div class="col-xs-6 col-sm-4"><b>UserName: </b>{{ Profile.user.username }}</div>
+          <div class="col-xs-6 col-sm-4"><b>Name: </b>{{Profile.user.first_name}}, {{Profile.user.last_name}} </div>
+          <div class="col-xs-6 col-sm-4"><b>Location: </b>{{ Profile.location }}</div>
+        </div>
+      </div>
+    </article>
 <br>
 
 {% endfor %}
 {%if not object_list%}
 <br>
-<div>No matches!!! Try searching by location with correct spelling</div>
+<div><font size = "4" color = "red"><b>No matches!!! Try searching by location with correct spelling</b></font></div>
+<br>
+<div>If searching for someone who lives in SLO, CA just search "SLO, CA". Don't include any extra words.</div>
+
 {% endif%}
 <br>
 <div>If you want to search by name return to the main search page</div>

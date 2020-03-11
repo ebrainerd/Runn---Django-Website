@@ -2,8 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h1>New comment</h1>
-
-    <!-- <form action="{% url 'post-detail' pk=post.pk %}" method="POST"> -->
+    <p><b>WARNING:</b> You cannot delete or update a comment once it has been posted!</p>
     <form method="POST">
 
         {% csrf_token %}

@@ -87,7 +87,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(CreateView):
     model = Post
-    fields = ['title', 'content', 'distance', 'time']
+    fields = ['title', 'content', 'distance', 'time', 'location']
     success_url = '/'
 
     def form_valid(self, form):
@@ -97,7 +97,7 @@ class PostCreateView(CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content', 'distance', 'time']
+    fields = ['title', 'content', 'distance', 'time', 'location']
 
     def form_valid(self, form):
         form.instance.author = self.request.user.profile

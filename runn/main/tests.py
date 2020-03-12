@@ -83,6 +83,64 @@ class ElliotsUnitTest1(TestCase):
         self.assertEqual(my_post.author, Profile.objects.get(user=User.objects.get(username='johnlennon123')))
 
 
+class UpdateMileage(TestCase):
+
+    def setUp(self):
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
+                                           last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+        my_user.save()
+
+
+    def testTotalMileage1(self):
+        my_user = User.objects.get(username='johnlennon123')
+        my_user_profile = my_user.profile
+
+        initial_total_mileage = my_user_profile.total_mileage
+
+        Post.objects.create(
+            title="My best run!",
+            content="I ran fast",
+            distance=6.9,
+            time="00:30:00",
+            author=my_user_profile)
+
+        Profile.objects.update_mileages(my_user)
+
+        updated_total_mileage = my_user_profile.total_mileage
+
+        self.assertEqual(initial_total_mileage, 0)
+        self.assertEqual(updated_total_mileage, 6.9)
+
+    def testTotalMileage2(self):
+        my_user = User.objects.get(username='johnlennon123')
+        my_user_profile = my_user.profile
+
+        Post.objects.create(
+            title="Another good run!",
+            content="I ran fast(er)",
+            distance=1.0,
+            time="00:29:00",
+            author=my_user_profile)
+
+        Profile.objects.update_mileages(my_user)
+
+        initial_total_mileage = my_user_profile.total_mileage
+
+        Post.objects.create(
+            title="Another good run!",
+            content="I ran fast(er)",
+            distance=1.0,
+            time="00:29:00",
+            author=my_user_profile)
+
+        Profile.objects.update_mileages(my_user)
+
+        updated_total_mileage = my_user_profile.total_mileage
+
+        self.assertEqual(initial_total_mileage, 1.0)
+        self.assertEqual(updated_total_mileage, 2.0)
+
+
 class SearchUsers(TestCase):
 
     def setUp(self):
@@ -123,6 +181,7 @@ class SearchUsers(TestCase):
         searchResults = find_user_by_userName_and_first_and_last_name('John Lennon')
         self.assertEqual(len(searchResults), 1)
         self.assertTrue(Profile.objects.get(user=User.objects.get(last_name= 'Lennon')) in searchResults)
+
     def testSearchUserName(self):
         searchResults = find_user_by_userName_and_first_and_last_name('Runman')
         self.assertEqual(len(searchResults), 1)

@@ -30,6 +30,7 @@ class ProfileDetailView(DetailView):
         else:
             user_to_view = get_object_or_404(User, id=pk, is_active=True)
 
+        Profile.objects.update_mileages(user_to_view)
         posts = Post.objects.filter(author=user_to_view.profile).order_by('-date_posted')
         is_following = False
         if self.request.user.is_authenticated and user_to_view.profile in self.request.user.is_following.all():
@@ -87,7 +88,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(CreateView):
     model = Post
-    fields = ['title', 'content', 'distance', 'time']
+    fields = ['title', 'content', 'distance', 'time', 'location']
     success_url = '/'
 
     def form_valid(self, form):
@@ -97,7 +98,7 @@ class PostCreateView(CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content', 'distance', 'time']
+    fields = ['title', 'content', 'distance', 'time', 'location']
 
     def form_valid(self, form):
         form.instance.author = self.request.user.profile

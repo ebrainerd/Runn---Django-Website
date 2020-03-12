@@ -75,7 +75,7 @@
         <p class='text-muted'>Here's how you did{% if user.id != request.user.id %} compared to {{user.username}}{% endif %}.
         <ul class="list-group">
             <li class="list-group-item list-group-item-light">
-                <p>Total Miles: {{ user.profile.total_mileage }} miles</p>
+                <p>Your Total Miles: {{ request.user.profile.total_mileage }} miles</p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ user.profile.total_mileage }} miles</p>{% endif %}
             </li>
         </ul>
@@ -83,7 +83,7 @@
         <p class='text-muted'>In the last 7 days:</p>
         <ul class="list-group">
             <li class="list-group-item list-group-item-light">
-                <p>Total Miles: {{ miles_last_7_days }} miles </p>
+                <p>Your Total Miles: {{ miles_last_7_days }} miles </p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }} miles</p>{% endif %}
             </li>
             <li class="list-group-item list-group-item-light">

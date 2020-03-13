@@ -73,6 +73,13 @@ class PostListViewHome(ListView):
             messages.info(self.request, message)
             return render(request, 'main/home.html', {'posts': qs})
 
+        if user.is_superuser:
+            qs = Post.objects.all().order_by('-date_posted')
+            message = "Logged in as administrator, " \
+                      + "currently displaying all posts."
+            messages.info(self.request, message)
+            return render(request, 'main/home.html', {'posts': qs})
+
         Profile.objects.update_mileages(user)
         is_following_user_ids = [x.user.id for x in user.is_following.all()]
         qs = Post.objects.filter(author__user__id__in=is_following_user_ids).order_by('-date_posted')
@@ -106,7 +113,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         post = self.get_object()
-        if self.request.user.profile == post.author:
+        if self.request.user.profile == post.author or self.request.user.is_superuser:
             return True
         return False
 
@@ -117,7 +124,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         post = self.get_object()
-        if self.request.user.profile == post.author:
+        if self.request.user.profile == post.author or self.request.user.is_superuser:
             return True
         return False
 

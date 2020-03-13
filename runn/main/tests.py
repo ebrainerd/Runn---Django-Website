@@ -8,7 +8,6 @@ from main.utils import *
 from django.test.client import RequestFactory
 
 
-
 class LemarsUnitTest1(unittest.TestCase):
 
     def test_update_post(self):
@@ -202,6 +201,7 @@ class UtilsTest(TestCase):
         my_user.save()
     def testUserStats(self):
         user_statistics(User.objects.get(last_name= 'Lennon'))
+
 
 class testUserStats(unittest.TestCase):
 

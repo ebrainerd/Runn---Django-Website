@@ -12,6 +12,6 @@ before_script:
 script:
   - python3 runn/manage.py makemigrations
   - python3 runn/manage.py migrate
-  - coverage run runn/main/tests.py
+  - coverage run tests.py
 after_success:
   - codecov

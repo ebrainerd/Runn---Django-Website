@@ -1,11 +1,11 @@
 [run]
 omit = 
-	manage.py
-    	xml\sax\expatreader.py
-	xml\dom\pulldom.py
+	*\manage.py
+    *\xml\sax\expatreader.py
+	*\xml\dom\pulldom.py
 
 [report]
 omit = 
-	manage.py
-        xml\sax\expatreader.py                                                     
-	xml\dom\pulldom.py
+	*\manage.py
+    *\xml\sax\expatreader.py
+	*\xml\dom\pulldom.py

@@ -8,7 +8,6 @@ from main.utils import *
 from django.test.client import RequestFactory
 
 
-
 class LemarsUnitTest1(unittest.TestCase):
 
     def test_update_post(self):
@@ -202,6 +201,45 @@ class UtilsTest(TestCase):
         my_user.save()
     def testUserStats(self):
         user_statistics(User.objects.get(last_name= 'Lennon'))
+
+
+class testUserStats(unittest.TestCase):
+
+    def testRunningStatistics(self):
+        # Arrange
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
+                                           last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+        my_user.save()
+        my_user_profile = my_user.profile
+
+        Post.objects.create(
+            title="My best run!",
+            content="I ran fast",
+            distance=20.0,
+            time="00:40:00",
+            author=my_user_profile)
+
+        Post.objects.create(
+            title="My best run!",
+            content="I ran fast",
+            distance=10.0,
+            time="00:10:00",
+            author=my_user_profile)
+
+        actual_miles = 30.0
+        actual_time = "0 Days, 0 Hours, 50 Minutes, 0 Seconds"
+        actual_avg_pace = round(50.0 / 30.0, 2) # 50 minutes / 30 miles
+        actual_longest_run = 20.0
+        actual_fastest_pace = 1.0
+
+        # Act
+        miles, time, avg_pace, longest_run, fastest_pace = user_statistics(my_user)
+
+        self.assertAlmostEqual(miles, actual_miles)
+        self.assertEqual(time, actual_time)
+        self.assertAlmostEqual(avg_pace, actual_avg_pace)
+        self.assertAlmostEqual(longest_run, actual_longest_run)
+        self.assertAlmostEqual(fastest_pace, actual_fastest_pace)
 
 
 if __name__ == '__main__':

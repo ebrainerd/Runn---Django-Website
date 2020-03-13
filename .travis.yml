@@ -9,9 +9,6 @@ install:
   - pip install coverage
 before_script:
   - python3 runn/manage.py runserver &
-script:
-  - python3 runn/manage.py makemigrations
-  - python3 runn/manage.py migrate
   - touch runn/.coveragerc
   - echo
     "[run]
@@ -27,5 +24,7 @@ script:
       *\xml\sax\expatreader.py
       *\xml\dom\pulldom.py
       *\django\*" >> runn/.coveragerc
-
+script:
+  - python3 runn/manage.py makemigrations
+  - python3 runn/manage.py migrate
   - ./runn/manage.py test main --with-coverage

@@ -1,0 +1,13 @@
+[run]
+omit =
+	*\manage.py
+    *\xml\sax\expatreader.py
+	*\xml\dom\pulldom.py
+	*\django\*
+
+[report]
+omit =
+	*\manage.py
+    *\xml\sax\expatreader.py
+	*\xml\dom\pulldom.py
+	*\django\*

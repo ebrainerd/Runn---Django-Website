@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 import unittest
 from unittest import skip
 from main.views import *
-from main.utils import user_statistics
+from main.utils import *
+from django.test.client import RequestFactory
+
 
 
 class LemarsUnitTest1(unittest.TestCase):
@@ -192,6 +194,14 @@ class SearchUsers(TestCase):
         searchResults = find_user_by_location('the beach')
         self.assertEqual(len(searchResults), 1)
         self.assertTrue(Profile.objects.get(location= 'the beach') in searchResults)
+
+class UtilsTest(TestCase):
+    def setUp(self):
+        my_user = User.objects.create_user(username='johnlennon123', first_name='John',
+                                           last_name='Lennon', email='lennon@thebeatles.com', password='johnpassword')
+        my_user.save()
+    def testUserStats(self):
+        user_statistics(User.objects.get(last_name= 'Lennon'))
 
 class testUserStats(unittest.TestCase):
 

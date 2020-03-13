@@ -75,7 +75,7 @@
         <p class='text-muted'>Here's how you did{% if user.id != request.user.id %} compared to {{user.username}}{% endif %}.
         <ul class="list-group">
             <li class="list-group-item list-group-item-light">
-                <p>Total Miles: {{ user.profile.total_mileage }} miles</p>
+                <p>Your Total Miles: {{ request.user.profile.total_mileage }} miles</p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ user.profile.total_mileage }} miles</p>{% endif %}
             </li>
         </ul>
@@ -83,23 +83,23 @@
         <p class='text-muted'>In the last 7 days:</p>
         <ul class="list-group">
             <li class="list-group-item list-group-item-light">
-                <p>Total Miles: {{ miles_last_7_days }} miles </p>
+                <p>Your Total Miles: {{ miles_last_7_days }} miles </p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Total Miles: {{ ou_miles_last_7_days }} miles</p>{% endif %}
             </li>
             <li class="list-group-item list-group-item-light">
-                <p>Time Running: {{ time_last_7_days }}</p>
+                <p>Your Time Running: {{ time_last_7_days }}</p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Time Running: {{ ou_time_last_7_days }}</p>{% endif %}
             </li>
             <li class="list-group-item list-group-item-light">
-                <p>Fastest Pace: {{ fastest_pace_last_7_days }} mins/mile</p>
+                <p>Your Fastest Pace: {{ fastest_pace_last_7_days }} mins/mile</p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Fastest Pace: {{ ou_fastest_pace_last_7_days }} mins/mile</p>{% endif %}
             </li>
             <li class="list-group-item list-group-item-light">
-                <p>Average Pace: {{ avg_pace_last_7_days }} mins/mile</p>
+                <p>Your Average Pace: {{ avg_pace_last_7_days }} mins/mile</p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Average Pace: {{ ou_avg_pace_last_7_days }} mins/mile</p>{% endif %}
             </li>
             <li class="list-group-item list-group-item-light">
-                <p>Longest Run: {{ longest_run_last_7_days }} miles</p>
+                <p>Your Longest Run: {{ longest_run_last_7_days }} miles</p>
                 {% if user.id != request.user.id %}<p>{{ user.username }}'s Longest Run: {{ ou_miles_last_7_days }} miles</p>{% endif %}
             </li>  
         </ul>
